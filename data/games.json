@@ -1,0 +1,88 @@
+[
+  {
+    "id": 1,
+    "name": "Snake.io",
+    "slug": "snake-io-mod-apk",
+    "version": "2.2.37",
+    "size": "60M",
+    "icon": "https://pixabay.com/get/gaa4b0f650b00345b711e44063c9d2a33cb93a41232de37c0e1afd08b801766d93dca6d5e20ac951b3a87378dbfdd984b291d777bb7cc13674ad5da06e6b28354_1280.jpg",
+    "description": "Classic snake game with multiplayer features and unlocked skins.",
+    "features": ["Unlocked Skins", "Drone View", "Multiplayer"],
+    "category": "arcade",
+    "download_count": "5M+",
+    "rating": 4.3,
+    "screenshots": [
+      "https://pixabay.com/get/g7521640fea68618909b8d69e7dfa74ed22f2abe8a4aca9ebdefde528d7a34dff3bfc6864e22d8c86f44bec143e1f6089ab937ee9b866ae797af863b3173a1e64_1280.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Hunting Clash",
+    "slug": "hunting-clash-mod-apk",
+    "version": "4.33.0",
+    "size": "173M",
+    "icon": "https://pixabay.com/get/g97aaccdf9f0cabd9011087eb50583363310526bbd2859ab4f17a2cbe044cc84764b953ffc2981ff98a4f7ec31fd45e475879047750733e8c21fe679827801373_1280.jpg",
+    "description": "Realistic hunting game with enhanced menu and stability features.",
+    "features": ["Menu", "Stability", "Hitbox"],
+    "category": "action",
+    "download_count": "8M+",
+    "rating": 4.6,
+    "screenshots": []
+  },
+  {
+    "id": 3,
+    "name": "Fortnite",
+    "slug": "fortnite-mod-apk",
+    "version": "36.00.0-43339403",
+    "size": "300M",
+    "icon": "https://pixabay.com/get/g31c3b7d9efc5185a836c2b217bb7e1c590d1e86ceb68be428046f368e15abeeea29757dd1c091773d0f057e2704bbb05b872f9497d8930971ac9765ea22b0cca_1280.jpg",
+    "description": "Battle royale game with all features unlocked for the ultimate gaming experience.",
+    "features": ["Unlocked All", "Premium Skins", "Battle Pass"],
+    "category": "action",
+    "download_count": "50M+",
+    "rating": 4.8,
+    "screenshots": []
+  },
+  {
+    "id": 4,
+    "name": "Pokemon GO",
+    "slug": "pokemon-go-mod-apk",
+    "version": "0.363.2",
+    "size": "388 MB",
+    "icon": "https://pixabay.com/get/g5ecdcce102dc3c9a0d152cbd6507d53352ab201de1335e520df47e5f84547521aee03184cf021a8a92147999d28f59e6ce7cc9eff4cdf74a28f206c5385ffe39_1280.jpg",
+    "description": "Catch Pokemon in the real world with enhanced features and teleport options.",
+    "features": ["Mega Menu", "Teleport", "Joystick & More"],
+    "category": "adventure",
+    "download_count": "100M+",
+    "rating": 4.7,
+    "screenshots": []
+  },
+  {
+    "id": 5,
+    "name": "Dan the Man",
+    "slug": "dan-the-man-mod-apk",
+    "version": "1.12.63",
+    "size": "89 MB",
+    "icon": "https://pixabay.com/get/gb06b940e134aad0adeb03e0de08f091c0f911edb2431a85eda171a617965ed423b19c55825024298c2d05259132b9e08b96bc1619fbdd1605441e5fe2de85b2f_1280.jpg",
+    "description": "Action-packed platformer game with unlimited resources and VIP features.",
+    "features": ["Mega Mod", "Money", "VIP"],
+    "category": "action",
+    "download_count": "3M+",
+    "rating": 4.4,
+    "screenshots": []
+  },
+  {
+    "id": 6,
+    "name": "Space Squad Survival",
+    "slug": "space-squad-survival-mod-apk",
+    "version": "1.0.05",
+    "size": "169M",
+    "icon": "https://pixabay.com/get/gaa4b0f650b00345b711e44063c9d2a33cb93a41232de37c0e1afd08b801766d93dca6d5e20ac951b3a87378dbfdd984b291d777bb7cc13674ad5da06e6b28354_1280.jpg",
+    "description": "Survive in space with your squad in this thrilling survival game.",
+    "features": ["Free Purchase", "Unlimited Resources"],
+    "category": "strategy",
+    "download_count": "2M+",
+    "rating": 4.2,
+    "screenshots": []
+  }
+]

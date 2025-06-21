@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "title": "Age of Empires official is coming to mobile",
+    "slug": "age-of-empires-mobile-official-release",
+    "image": "https://pixabay.com/get/g324e1268c02795b57d401cfa85c7a4c81eafb45fcc1c39a672cba5bc818fa78e81ad4404b04b2b7ce53dc813537fed9636bb10ecc4d16f48ab1d703ecadd6539_1280.jpg",
+    "excerpt": "Microsoft announces the official mobile version of the legendary Age of Empires strategy game series.",
+    "content": "# Age of Empires Mobile: A New Era Begins\n\nMicrosoft has officially announced that the beloved Age of Empires franchise is making its way to mobile devices. This marks a significant milestone for the real-time strategy genre on mobile platforms.\n\n## What to Expect\n\n- **Classic Gameplay**: Experience the strategic depth that made Age of Empires legendary\n- **Mobile Optimization**: Touch-friendly controls designed specifically for mobile devices\n- **Multiplayer Support**: Battle against friends and players worldwide\n- **Campaign Mode**: Relive historical battles and civilizations\n\n## Release Timeline\n\nThe game is expected to launch in Q3 2025, with beta testing beginning in selected regions.\n\n*Stay tuned for more updates on this exciting development!*",
+    "author": "JARMOD Team",
+    "date": "2025-06-14",
+    "category": "gaming"
+  },
+  {
+    "id": 2,
+    "title": "HUYA bought APKPURE from Tencent for $81 million",
+    "slug": "huya-apkpure-acquisition-tencent",
+    "image": "https://pixabay.com/get/g80ba1b6ed7386ea5a3328bc77ca8ccefa1565f0e46718fae3ab04aee11cbcdb4c5d9f4abbd05dd89590edc9d0d41cebc45ec0286f91acff24e4249310b7342de_1280.jpg",
+    "excerpt": "Chinese streaming giant HUYA acquires popular APK distribution platform APKPURE in major tech deal.",
+    "content": "# HUYA Acquires APKPURE: Major Industry Shake-up\n\nIn a surprising move that has sent shockwaves through the Android app distribution industry, Chinese game streaming platform HUYA has acquired APKPURE from Tencent for a staggering $81 million.\n\n## Deal Details\n\n- **Purchase Price**: $81 million USD\n- **Previous Owner**: Tencent Holdings\n- **New Owner**: HUYA Inc.\n- **Completion Date**: June 2025\n\n## What This Means\n\nThis acquisition represents HUYA's strategic expansion beyond game streaming into the broader Android ecosystem. APKPURE, one of the world's largest third-party Android app stores, serves millions of users globally.\n\n## Industry Impact\n\nThe deal is expected to reshape the competitive landscape of alternative app stores and could influence how mobile apps are distributed outside of Google Play Store.\n\n*This story is developing and we'll continue to provide updates as more information becomes available.*",
+    "author": "Tech Reporter",
+    "date": "2025-06-13",
+    "category": "tech-news"
+  },
+  {
+    "id": 3,
+    "title": "How to install and use Zygisk Module for rooted & non-rooted phone",
+    "slug": "zygisk-module-installation-guide",
+    "image": "https://pixabay.com/get/gfcf6a33ad83f5a86b76b1fa3a951b7516cf7e58dbb479285bb34ccbd1663df41cd20d7871d054f587831d8de6b9049c307c6ecdd7e0ff24328c65524978eaccc_1280.jpg",
+    "excerpt": "Complete guide on installing and using Zygisk modules for both rooted and non-rooted Android devices.",
+    "content": "# Zygisk Module Installation Guide\n\nZygisk is a powerful framework that allows you to run modules on Android devices. This comprehensive guide will walk you through the installation process for both rooted and non-rooted devices.\n\n## Prerequisites\n\n- Android device (rooted or non-rooted)\n- Latest version of Magisk (for rooted devices)\n- Zygisk module files\n- Basic understanding of Android system\n\n## For Rooted Devices\n\n### Step 1: Enable Zygisk in Magisk\n1. Open Magisk Manager\n2. Go to Settings\n3. Enable 'Zygisk' option\n4. Reboot your device\n\n### Step 2: Install Zygisk Module\n1. Download the module file (.zip)\n2. Open Magisk Manager\n3. Go to Modules section\n4. Tap 'Install from storage'\n5. Select the module file\n6. Reboot after installation\n\n## For Non-Rooted Devices\n\n### Using Zygisk Next\n1. Download Zygisk Next APK\n2. Install the application\n3. Grant necessary permissions\n4. Load your desired modules\n5. Apply changes and restart\n\n## Important Notes\n\n- Always backup your device before installing modules\n- Only use trusted sources for module downloads\n- Some modules may require specific Android versions\n- Test modules one at a time to identify compatibility issues\n\n## Troubleshooting\n\nIf you encounter issues:\n- Check module compatibility\n- Verify Zygisk is properly enabled\n- Clear cache and restart\n- Disable conflicting modules\n\n*Remember to always exercise caution when modifying system-level components.*",
+    "author": "Android Expert",
+    "date": "2025-06-12",
+    "category": "tutorial"
+  },
+  {
+    "id": 4,
+    "title": "Top 10 MOD APK Security Tips for 2025",
+    "slug": "mod-apk-security-tips-2025",
+    "image": "https://pixabay.com/get/g22644da36a9564c56485304c27dd343ce1ecece0203aff255bdde3419f3ca542a3cca70d9d673be9e72452b74da6e95a70bcb0412e4e4900500fff615f6f475a_1280.jpg",
+    "excerpt": "Essential security guidelines for safely downloading and installing MOD APKs in 2025.",
+    "content": "# MOD APK Security: Your 2025 Safety Guide\n\nWith the increasing popularity of modified Android applications, it's crucial to understand the security implications and best practices for safe usage.\n\n## Top 10 Security Tips\n\n### 1. Use Trusted Sources Only\nAlways download MOD APKs from reputable websites with good track records and user reviews.\n\n### 2. Check Permissions Carefully\nReview app permissions before installation. Be wary of apps requesting unnecessary access.\n\n### 3. Use Antivirus Protection\nInstall a reliable mobile antivirus solution to scan APK files before installation.\n\n### 4. Enable Play Protect\nKeep Google Play Protect enabled for additional security scanning.\n\n### 5. Backup Your Device\nRegularly backup your device data before installing new MOD APKs.\n\n### 6. Monitor App Behavior\nWatch for unusual app behavior, excessive battery drain, or unexpected network activity.\n\n### 7. Keep Your System Updated\nMaintain the latest Android security patches and system updates.\n\n### 8. Use Isolated Environments\nConsider using app isolation or dual space apps for testing MOD APKs.\n\n### 9. Verify Digital Signatures\nWhen possible, verify the digital signature of APK files.\n\n### 10. Know the Risks\nUnderstand that MOD APKs can potentially:\n- Contain malware\n- Compromise personal data\n- Violate app terms of service\n- Cause system instability\n\n## Red Flags to Avoid\n\n- Apps from unknown developers\n- Excessive permissions requests\n- No user reviews or ratings\n- Suspicious file sizes\n- Requests for system-level access\n\n## Conclusion\n\nWhile MOD APKs can provide enhanced features, security should always be your top priority. Follow these guidelines to minimize risks and enjoy a safer Android experience.\n\n*Remember: When in doubt, stick to official app stores.*",
+    "author": "Security Team",
+    "date": "2025-06-11",
+    "category": "security"
+  }
+]

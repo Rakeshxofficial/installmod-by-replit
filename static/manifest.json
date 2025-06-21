@@ -1,0 +1,70 @@
+{
+  "name": "INSTALLMOD.COM - MOD APK Downloads",
+  "short_name": "installMOD",
+  "description": "Premium MOD APKs and Android apps with unlimited features",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7CB342",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["entertainment", "games", "utilities"],
+  "icons": [
+    {
+      "src": "/static/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/static/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/static/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Apps",
+      "short_name": "Apps",
+      "description": "Browse all MOD APKs",
+      "url": "/apps",
+      "icons": [
+        {
+          "src": "/static/shortcut-apps.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Browse Games",
+      "short_name": "Games",
+      "description": "Browse all MOD games",
+      "url": "/games",
+      "icons": [
+        {
+          "src": "/static/shortcut-games.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Latest News",
+      "short_name": "News",
+      "description": "Read latest news and updates",
+      "url": "/news",
+      "icons": [
+        {
+          "src": "/static/shortcut-news.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

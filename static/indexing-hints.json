@@ -1,0 +1,35 @@
+{
+  "priority_pages": [
+    {
+      "url": "https://installmod.com/",
+      "priority": "high",
+      "changefreq": "daily",
+      "content_type": "homepage"
+    },
+    {
+      "url": "https://installmod.com/apps",
+      "priority": "high",
+      "changefreq": "daily",
+      "content_type": "category"
+    },
+    {
+      "url": "https://installmod.com/games",
+      "priority": "high",
+      "changefreq": "daily",
+      "content_type": "category"
+    }
+  ],
+  "indexing_guidelines": {
+    "crawl_delay": 1,
+    "max_pages_per_visit": 100,
+    "preferred_crawl_time": "02:00-06:00 UTC",
+    "content_freshness": "updated daily"
+  },
+  "quality_signals": {
+    "average_page_size": "25KB",
+    "average_load_time": "<2s",
+    "mobile_friendly": true,
+    "https_enabled": true,
+    "structured_data": true
+  }
+}
