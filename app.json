@@ -1,0 +1,37 @@
+{
+  "name": "installMOD - MOD APK Website",
+  "description": "A Flask-based MOD APK website with subdomain routing system",
+  "repository": "https://github.com/Rakeshxofficial/installmod-by-replit",
+  "logo": "https://installmod.com/static/images/favicon.ico",
+  "keywords": ["flask", "python", "mod", "apk", "android", "website"],
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL database URL (automatically provided by Heroku Postgres addon)",
+      "required": true
+    },
+    "SESSION_SECRET": {
+      "description": "Secret key for Flask sessions",
+      "generator": "secret",
+      "required": true
+    },
+    "BASE_DOMAIN": {
+      "description": "Your base domain name (e.g., installmod.com)",
+      "value": "installmod.com",
+      "required": true
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:essential-0"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "python init_db.py"
+  }
+}
