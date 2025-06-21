@@ -1,24 +1,12 @@
-
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python"
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb"
       }
-    }
   ],
   "routes": [
-    
-      "dest": "/api/index"
+    "dest": "/api/index"
     }
   ],
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 30
-    }
-  },
-  "env": {
+      "env": {
     "BASE_DOMAIN": "installmod.com"
   }
