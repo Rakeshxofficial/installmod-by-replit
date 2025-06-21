@@ -1,0 +1,570 @@
+{% extends "base.html" %}
+
+{% block title %}{{ genre_name }} - Genre{% endblock %}
+
+{% block meta_description %}Explore all {{ genre_name }} apps and games. Download MOD APKs and premium apps from the {{ genre_name }} category.{% endblock %}
+
+{% block canonical %}{{ url_for('genre_detail', slug=genre_slug, _external=True) }}{% endblock %}
+
+{% block extra_head %}
+<!-- Schema.org JSON-LD for Genre/Category -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{{ genre_name }} Apps and Games",
+  "description": "Collection of {{ genre_name }} category apps and games available for download",
+  "url": "{{ url_for('genre_detail', slug=genre_slug, _external=True) }}",
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "{{ genre_name }} Collection",
+    "numberOfItems": "{{ total_count }}",
+    "itemListElement": [
+      {% for app in apps[:10] %}
+      {
+        "@type": "SoftwareApplication",
+        "name": "{{ app.name }}",
+        "url": "{{ url_for('content_detail', slug=app.slug, _external=True) }}",
+        "applicationCategory": "{{ app.category }}",
+        "genre": "{{ genre_name }}",
+        "operatingSystem": "Android"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+      {% if games %}
+        {% if apps %},{% endif %}
+        {% for game in games[:10] %}
+        {
+          "@type": "VideoGame",
+          "name": "{{ game.name }}",
+          "url": "{{ url_for('content_detail', slug=game.slug, _external=True) }}",
+          "genre": "{{ genre_name }}",
+          "gamePlatform": "Android"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      {% endif %}
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ url_for('index', _external=True) }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Genres",
+        "item": "{{ url_for('genres_list', _external=True) }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ genre_name }}",
+        "item": "{{ url_for('genre_detail', slug=genre_slug, _external=True) }}"
+      }
+    ]
+  }
+}
+</script>
+
+<!-- Open Graph Tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ genre_name }} Apps and Games Collection">
+<meta property="og:description" content="Discover {{ total_count }} {{ genre_name }} apps and games on JARMOD.COM">
+<meta property="og:url" content="{{ url_for('genre_detail', slug=genre_slug, _external=True) }}">
+<meta property="og:site_name" content="JARMOD.COM">
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="{{ genre_name }}, MOD APK, Android apps, games, category, {{ genre_name }} apps">
+{% endblock %}
+
+{% block content %}
+<div class="genre-detail-page">
+    <!-- Genre Hero Section -->
+    <div class="genre-hero">
+        <div class="container">
+            <div class="genre-profile">
+                <div class="genre-icon-large">
+                    {% if 'music' in genre_name.lower() %}
+                        <i class="fas fa-music"></i>
+                    {% elif 'game' in genre_name.lower() or 'action' in genre_name.lower() %}
+                        <i class="fas fa-gamepad"></i>
+                    {% elif 'photo' in genre_name.lower() or 'video' in genre_name.lower() %}
+                        <i class="fas fa-camera"></i>
+                    {% elif 'social' in genre_name.lower() %}
+                        <i class="fas fa-users"></i>
+                    {% elif 'tool' in genre_name.lower() or 'productivity' in genre_name.lower() %}
+                        <i class="fas fa-tools"></i>
+                    {% elif 'education' in genre_name.lower() %}
+                        <i class="fas fa-graduation-cap"></i>
+                    {% elif 'entertainment' in genre_name.lower() %}
+                        <i class="fas fa-tv"></i>
+                    {% elif 'business' in genre_name.lower() %}
+                        <i class="fas fa-briefcase"></i>
+                    {% elif 'health' in genre_name.lower() %}
+                        <i class="fas fa-heart"></i>
+                    {% elif 'travel' in genre_name.lower() %}
+                        <i class="fas fa-plane"></i>
+                    {% elif 'shopping' in genre_name.lower() %}
+                        <i class="fas fa-shopping-cart"></i>
+                    {% elif 'news' in genre_name.lower() %}
+                        <i class="fas fa-newspaper"></i>
+                    {% elif 'finance' in genre_name.lower() %}
+                        <i class="fas fa-dollar-sign"></i>
+                    {% elif 'sports' in genre_name.lower() %}
+                        <i class="fas fa-football-ball"></i>
+                    {% else %}
+                        <i class="fas fa-star"></i>
+                    {% endif %}
+                </div>
+                <div class="genre-details">
+                    <h1 class="genre-title">{{ genre_name }}</h1>
+                    <div class="genre-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>{{ apps|length }} Apps</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-gamepad"></i>
+                            <span>{{ games|length }} Games</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-download"></i>
+                            <span>{{ total_count }} Total Items</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="content-tabs">
+            <button class="tab-btn active" onclick="showTab('apps')">
+                <i class="fas fa-mobile-alt"></i>
+                Apps ({{ apps|length }})
+            </button>
+            <button class="tab-btn" onclick="showTab('games')">
+                <i class="fas fa-gamepad"></i>
+                Games ({{ games|length }})
+            </button>
+        </div>
+
+        <!-- Apps Section -->
+        <div id="apps-tab" class="tab-content active">
+            {% if apps %}
+            <div class="section-header">
+                <h2>{{ genre_name }} Apps</h2>
+                <p>Discover all mobile applications in the {{ genre_name }} category</p>
+            </div>
+            <div class="items-grid">
+                {% for app in apps %}
+                <div class="app-card">
+                    <a href="/{{ app.slug }}" class="app-link">
+                        <div class="app-image">
+                            <img src="{{ app.icon }}" alt="{{ app.name }}" class="app-icon">
+                            <div class="app-overlay">
+                                <i class="fas fa-download"></i>
+                            </div>
+                        </div>
+                        <div class="app-info">
+                            <h3 class="app-title">{{ app.name }}</h3>
+                            <div class="app-meta">
+                                <span class="version">v{{ app.version }}</span>
+                                <span class="size">{{ app.size }}</span>
+                            </div>
+                            <div class="app-publisher">
+                                <i class="fas fa-user"></i>
+                                {{ app.publisher }}
+                            </div>
+                            {% if app.rating %}
+                            <div class="app-rating">
+                                <div class="stars">
+                                    {% for i in range(5) %}
+                                    <i class="fas fa-star {% if i < app.rating %}active{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <span class="rating-text">{{ app.rating }}/5</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-section">
+                <div class="empty-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>No Apps Available</h3>
+                <p>No apps found in the {{ genre_name }} category.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Games Section -->
+        <div id="games-tab" class="tab-content">
+            {% if games %}
+            <div class="section-header">
+                <h2>{{ genre_name }} Games</h2>
+                <p>Explore all mobile games in the {{ genre_name }} category</p>
+            </div>
+            <div class="items-grid">
+                {% for game in games %}
+                <div class="app-card">
+                    <a href="/{{ game.slug }}" class="app-link">
+                        <div class="app-image">
+                            <img src="{{ game.icon }}" alt="{{ game.name }}" class="app-icon">
+                            <div class="app-overlay">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                        </div>
+                        <div class="app-info">
+                            <h3 class="app-title">{{ game.name }}</h3>
+                            <div class="app-meta">
+                                <span class="version">v{{ game.version }}</span>
+                                <span class="size">{{ game.size }}</span>
+                            </div>
+                            <div class="app-publisher">
+                                <i class="fas fa-user"></i>
+                                {{ game.publisher }}
+                            </div>
+                            {% if game.rating %}
+                            <div class="app-rating">
+                                <div class="stars">
+                                    {% for i in range(5) %}
+                                    <i class="fas fa-star {% if i < game.rating %}active{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <span class="rating-text">{{ game.rating }}/5</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-section">
+                <div class="empty-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>No Games Available</h3>
+                <p>No games found in the {{ genre_name }} category.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.genre-detail-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.genre-hero {
+    background: linear-gradient(135deg, #2c5530, #4a7c59);
+    color: white;
+    padding: 3rem 0;
+}
+
+.genre-profile {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.genre-icon-large {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    border: 3px solid rgba(255,255,255,0.3);
+}
+
+.genre-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.genre-meta {
+    display: flex;
+    gap: 2rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.meta-item i {
+    color: rgba(255,255,255,0.8);
+}
+
+.content-tabs {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.tab-btn {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+    color: #2c5530;
+    border-bottom-color: #2c5530;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    color: #2c5530;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.app-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.app-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.app-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.app-image {
+    position: relative;
+    height: 160px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.app-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.app-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(44,85,48,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.app-card:hover .app-overlay {
+    opacity: 1;
+}
+
+.app-overlay i {
+    color: white;
+    font-size: 2rem;
+}
+
+.app-info {
+    padding: 1.5rem;
+}
+
+.app-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c5530;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.app-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.app-publisher {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+.app-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars {
+    display: flex;
+    gap: 0.1rem;
+}
+
+.stars i {
+    color: #ddd;
+    font-size: 0.9rem;
+}
+
+.stars i.active {
+    color: #ffc107;
+}
+
+.rating-text {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.empty-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.empty-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .genre-hero {
+        padding: 2rem 0;
+    }
+    
+    .genre-profile {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .genre-icon-large {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+    }
+    
+    .genre-title {
+        font-size: 2rem;
+    }
+    
+    .genre-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .content-tabs {
+        margin: 1rem 0;
+    }
+    
+    .tab-btn {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .items-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<script>
+function showTab(tabName) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab and activate button
+    document.getElementById(tabName + '-tab').classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}

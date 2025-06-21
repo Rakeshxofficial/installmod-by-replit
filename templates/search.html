@@ -1,0 +1,508 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if query %}Search Results for "{{ query }}"{% else %}Search{% endif %} - installMOD
+{% endblock %}
+
+{% block meta_description %}
+{% if query %}Search results for "{{ query }}" on installMOD. Find MOD APKs, games, and news articles.{% else %}Search for MOD APKs, games, and news on installMOD. Advanced search with filters and sorting options.{% endif %}
+{% endblock %}
+
+{% block canonical %}{{ url_for('search', q=query, _external=True) }}{% endblock %}
+
+{% block extra_head %}
+<!-- SEO Meta Tags for Search Pages -->
+{% if query %}
+<meta name="keywords" content="{{ query }}, MOD APK, Android, {{ query }} download, {{ query }} mod, installMOD">
+<meta name="author" content="installMOD">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="{% if query %}Search Results for &quot;{{ query }}&quot;{% else %}Search{% endif %} - installMOD">
+<meta property="og:description" content="{% if query %}Find {{ query }} MOD APK downloads, games, and related content on installMOD. {{ total_results }} results found.{% else %}Search for MOD APKs, games, and news on installMOD with advanced filters.{% endif %}">
+<meta property="og:url" content="{{ url_for('search', q=query, _external=True) }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="installMOD">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% if query %}{{ query }} Search Results{% else %}Search{% endif %} - installMOD">
+<meta name="twitter:description" content="{% if query %}{{ total_results }} results for {{ query }} on installMOD{% else %}Search MOD APKs and games{% endif %}">
+<meta name="twitter:site" content="@installMOD">
+
+<!-- Additional SEO Tags -->
+<meta name="theme-color" content="#198754">
+<meta name="msapplication-TileColor" content="#198754">
+{% endif %}
+
+<!-- Schema.org JSON-LD for Search Results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SearchResultsPage",
+  "name": "{% if query %}Search Results for '{{ query }}'{% else %}Search{% endif %}",
+  "description": "{% if query %}Search results for {{ query }} on installMOD. Find MOD APKs, games, and news articles.{% else %}Search for MOD APKs, games, and news on installMOD.{% endif %}",
+  "url": "{{ request.url }}",
+  "inLanguage": "en-US",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "installMOD",
+    "url": "{{ url_for('index', _external=True) }}",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ url_for('search', _external=True) }}?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {% if query and total_results > 0 %}
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": {{ total_results }},
+    "itemListElement": [
+      {% set ns = namespace(position=0, first=true) %}
+      {% for app in apps[:10] %}
+        {% set ns.position = ns.position + 1 %}
+        {% if not ns.first %},{% endif %}
+        {% set ns.first = false %}
+        {
+          "@type": "ListItem",
+          "position": {{ ns.position }},
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "{{ app.name | replace('"', '\\"') }}",
+            "description": "{{ (app.short_description or app.description or '')[:150] | replace('"', '\\"') }}",
+            "url": "{{ url_for('content_detail', slug=app.slug, _external=True) }}",
+            "applicationCategory": "{{ app.category or 'Mobile Application' }}",
+            "operatingSystem": "Android",
+            "softwareVersion": "{{ app.version or '1.0' }}",
+            "fileSize": "{{ app.size or 'Unknown' }}",
+            "publisher": {
+              "@type": "Organization",
+              "name": "{{ (app.publisher or 'Unknown Publisher') | replace('"', '\\"') }}"
+            }{% if app.rating %},
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "{{ app.rating }}",
+              "ratingCount": "{{ app.votes or 1 }}"
+            }{% endif %}
+          }
+        }
+      {% endfor %}
+      {% for game in games[:10] %}
+        {% set ns.position = ns.position + 1 %}
+        {% if not ns.first %},{% endif %}
+        {% set ns.first = false %}
+        {
+          "@type": "ListItem",
+          "position": {{ ns.position }},
+          "item": {
+            "@type": "VideoGame",
+            "name": "{{ game.name | replace('"', '\\"') }}",
+            "description": "{{ (game.short_description or game.description or '')[:150] | replace('"', '\\"') }}",
+            "url": "{{ url_for('content_detail', slug=game.slug, _external=True) }}",
+            "genre": "{{ game.genre or game.category or 'Game' }}",
+            "gamePlatform": "Android",
+            "publisher": {
+              "@type": "Organization",
+              "name": "{{ (game.publisher or 'Unknown Publisher') | replace('"', '\\"') }}"
+            }{% if game.rating %},
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "{{ game.rating }}",
+              "ratingCount": "{{ game.votes or 1 }}"
+            }{% endif %}
+          }
+        }
+      {% endfor %}
+    ]
+  }
+  {% endif %}
+}
+</script>
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Search Header -->
+    <div class="search-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                {% if query %}
+                <h1>Search Results</h1>
+                <p class="lead">{{ total_results }} results found for "<strong>{{ query }}</strong>"</p>
+                {% else %}
+                <h1>Search</h1>
+                <p class="lead">Find apps, games, and news on installMOD</p>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <!-- Advanced Search Form -->
+                <form action="{{ url_for('search') }}" method="GET" class="search-form">
+                    <div class="input-group mb-3">
+                        <input type="text" name="q" class="form-control" placeholder="Search apps, games, news..." 
+                               value="{{ query }}" required>
+                        <button class="btn btn-success" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if query %}
+    <!-- Search Filters -->
+    <div class="search-filters mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#searchFilters" 
+                            aria-expanded="false" aria-controls="searchFilters">
+                        <i class="fas fa-filter"></i> Advanced Filters
+                    </button>
+                </h5>
+            </div>
+            <div id="searchFilters" class="collapse">
+                <div class="card-body">
+                    <form action="{{ url_for('search') }}" method="GET" class="row g-3">
+                        <input type="hidden" name="q" value="{{ query }}">
+                        
+                        <div class="col-md-3">
+                            <label for="contentType" class="form-label">Content Type</label>
+                            <select name="type" id="contentType" class="form-select">
+                                <option value="" {% if not content_type %}selected{% endif %}>All</option>
+                                <option value="apps" {% if content_type == 'apps' %}selected{% endif %}>Apps</option>
+                                <option value="games" {% if content_type == 'games' %}selected{% endif %}>Games</option>
+                                <option value="news" {% if content_type == 'news' %}selected{% endif %}>News</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select name="category" id="category" class="form-select">
+                                <option value="" {% if not category %}selected{% endif %}>All Categories</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat.title() }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="sortBy" class="form-label">Sort By</label>
+                            <select name="sort" id="sortBy" class="form-select">
+                                <option value="relevance" {% if sort_by == 'relevance' %}selected{% endif %}>Relevance</option>
+                                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
+                                <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Tabs -->
+    <div class="search-results">
+        <ul class="nav nav-tabs mb-4" id="searchTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" 
+                        type="button" role="tab" aria-controls="all" aria-selected="true">
+                    All ({{ total_results }})
+                </button>
+            </li>
+            {% if apps %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="apps-tab" data-bs-toggle="tab" data-bs-target="#apps" 
+                        type="button" role="tab" aria-controls="apps" aria-selected="false">
+                    Apps ({{ apps|length }})
+                </button>
+            </li>
+            {% endif %}
+            {% if games %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="games-tab" data-bs-toggle="tab" data-bs-target="#games" 
+                        type="button" role="tab" aria-controls="games" aria-selected="false">
+                    Games ({{ games|length }})
+                </button>
+            </li>
+            {% endif %}
+            {% if news %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="news-tab" data-bs-toggle="tab" data-bs-target="#news" 
+                        type="button" role="tab" aria-controls="news" aria-selected="false">
+                    News ({{ news|length }})
+                </button>
+            </li>
+            {% endif %}
+        </ul>
+
+        <div class="tab-content" id="searchTabContent">
+            <!-- All Results Tab -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                {% if total_results > 0 %}
+                <!-- Mixed Results -->
+                {% set all_results = apps + games + news %}
+                {% if sort_by == 'relevance' %}
+                    {% set all_results = all_results|sort(attribute='relevance_score', reverse=true) %}
+                {% elif sort_by == 'name' %}
+                    {% set all_results = all_results|sort(attribute='name') %}
+                {% endif %}
+                
+                {% for item in all_results %}
+                <a href="/{{ item.slug }}" class="app-card-link">
+                    <div class="app-card mb-3">
+                        <div class="app-icon">
+                            {% if item.type == 'news' %}
+                            <img src="{{ item.featured_image or 'https://via.placeholder.com/60x60?text=News' }}" alt="{{ item.title }}">
+                            {% else %}
+                            <img src="{{ item.icon }}" alt="{{ item.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="app-info flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    {% if item.type == 'news' %}
+                                    <h4>{{ item.title }}</h4>
+                                    {% else %}
+                                    <h4>{{ item.name }}</h4>
+                                    {% endif %}
+                                    <div class="app-details">
+                                        {% if item.type == 'app' %}
+                                        <i class="fas fa-mobile-alt text-primary"></i>
+                                        <span>App • {{ item.version }} • {{ item.size }}</span>
+                                        {% elif item.type == 'game' %}
+                                        <i class="fas fa-gamepad text-success"></i>
+                                        <span>Game • {{ item.version }} • {{ item.size }}</span>
+                                        {% else %}
+                                        <i class="fas fa-newspaper text-info"></i>
+                                        <span>News • {{ item.date }}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if item.type != 'news' and item.publisher %}
+                                    <div class="app-features">
+                                        <i class="fas fa-user text-muted"></i>
+                                        <span>{{ item.publisher }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="text-end">
+                                    {% if sort_by == 'relevance' and item.relevance_score %}
+                                    <small class="text-muted">Score: {{ item.relevance_score }}</small>
+                                    {% endif %}
+                                    {% if item.type != 'news' and item.rating %}
+                                    <div class="rating">
+                                        {% for i in range(1, 6) %}
+                                        <i class="fas fa-star {% if i <= item.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <p class="text-muted mt-2 mb-0">
+                                {% if item.type == 'news' %}
+                                {{ (item.excerpt or '')|truncate(120) }}
+                                {% else %}
+                                {{ (item.short_description or '')|truncate(120) }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                <!-- No Results -->
+                <div class="no-results text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h3>No results found</h3>
+                    <p class="text-muted">Try adjusting your search terms or filters</p>
+                    
+                    {% if suggestions %}
+                    <div class="mt-4">
+                        <h5>Did you mean:</h5>
+                        <ul class="list-inline">
+                            {% for suggestion in suggestions %}
+                            <li class="list-inline-item">
+                                <a href="{{ url_for('search', q=suggestion) }}" class="btn btn-outline-primary btn-sm">{{ suggestion }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <h5>Popular searches:</h5>
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="{{ url_for('search', q='spotify') }}" class="btn btn-outline-success btn-sm">Spotify</a></li>
+                            <li class="list-inline-item"><a href="{{ url_for('search', q='netflix') }}" class="btn btn-outline-success btn-sm">Netflix</a></li>
+                            <li class="list-inline-item"><a href="{{ url_for('search', q='tiktok') }}" class="btn btn-outline-success btn-sm">TikTok</a></li>
+                            <li class="list-inline-item"><a href="{{ url_for('search', q='games') }}" class="btn btn-outline-success btn-sm">Games</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Apps Tab -->
+            {% if apps %}
+            <div class="tab-pane fade" id="apps" role="tabpanel" aria-labelledby="apps-tab">
+                {% for app in apps %}
+                <a href="/{{ app.slug }}" class="app-card-link">
+                    <div class="app-card mb-3">
+                        <div class="app-icon">
+                            <img src="{{ app.icon }}" alt="{{ app.name }}">
+                        </div>
+                        <div class="app-info">
+                            <h4>{{ app.name }}</h4>
+                            <div class="app-details">
+                                <i class="fas fa-download text-danger"></i>
+                                <span>{{ app.version }} + {{ app.size }}</span>
+                            </div>
+                            {% if app.features %}
+                            <div class="app-features">
+                                <i class="fas fa-times text-danger"></i>
+                                <span>{{ app.features|join(', ') }}</span>
+                            </div>
+                            {% endif %}
+                            {% if app.publisher %}
+                            <div class="app-publisher">
+                                <i class="fas fa-user text-muted"></i>
+                                <span>{{ app.publisher }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Games Tab -->
+            {% if games %}
+            <div class="tab-pane fade" id="games" role="tabpanel" aria-labelledby="games-tab">
+                {% for game in games %}
+                <a href="/{{ game.slug }}" class="app-card-link">
+                    <div class="app-card mb-3">
+                        <div class="app-icon">
+                            <img src="{{ game.icon }}" alt="{{ game.name }}">
+                        </div>
+                        <div class="app-info">
+                            <h4>{{ game.name }}</h4>
+                            <div class="app-details">
+                                <i class="fas fa-download text-danger"></i>
+                                <span>{{ game.version }} + {{ game.size }}</span>
+                            </div>
+                            {% if game.features %}
+                            <div class="app-features">
+                                <i class="fas fa-times text-danger"></i>
+                                <span>{{ game.features|join(', ') }}</span>
+                            </div>
+                            {% endif %}
+                            {% if game.publisher %}
+                            <div class="app-publisher">
+                                <i class="fas fa-user text-muted"></i>
+                                <span>{{ game.publisher }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- News Tab -->
+            {% if news %}
+            <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
+                {% for article in news %}
+                <a href="/{{ article.slug }}" class="news-card-link">
+                    <div class="news-card mb-3">
+                        <div class="news-image">
+                            <img src="{{ article.featured_image or 'https://via.placeholder.com/300x200?text=News' }}" alt="{{ article.title }}">
+                        </div>
+                        <div class="news-content">
+                            <h3>{{ article.title }}</h3>
+                            <p class="text-muted">{{ article.excerpt|truncate(150) }}</p>
+                            <div class="news-meta">
+                                <span class="text-muted">
+                                    <i class="fas fa-calendar"></i> {{ article.date }}
+                                    {% if article.author %}
+                                    <i class="fas fa-user ms-3"></i> {{ article.author }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Search State -->
+    <div class="empty-search-state text-center py-5">
+        <i class="fas fa-search fa-4x text-muted mb-4"></i>
+        <h2>Start Your Search</h2>
+        <p class="lead text-muted mb-4">Enter keywords to find apps, games, and news articles</p>
+        
+        <!-- Popular Searches -->
+        <div class="popular-searches mb-5">
+            <h5>Popular Searches</h5>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{{ url_for('search', q='spotify') }}" class="btn btn-outline-success">Spotify</a>
+                <a href="{{ url_for('search', q='netflix') }}" class="btn btn-outline-success">Netflix</a>
+                <a href="{{ url_for('search', q='tiktok') }}" class="btn btn-outline-success">TikTok</a>
+                <a href="{{ url_for('search', q='premium') }}" class="btn btn-outline-success">Premium</a>
+                <a href="{{ url_for('search', q='mod') }}" class="btn btn-outline-success">MOD</a>
+                <a href="{{ url_for('search', q='games') }}" class="btn btn-outline-success">Games</a>
+            </div>
+        </div>
+
+        <!-- Browse Categories -->
+        <div class="browse-categories">
+            <h5>Browse by Category</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="category-group">
+                        <h6><i class="fas fa-mobile-alt text-primary"></i> Apps</h6>
+                        <a href="{{ url_for('apps_list', category='social') }}" class="btn btn-sm btn-light">Social</a>
+                        <a href="{{ url_for('apps_list', category='entertainment') }}" class="btn btn-sm btn-light">Entertainment</a>
+                        <a href="{{ url_for('apps_list', category='productivity') }}" class="btn btn-sm btn-light">Productivity</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="category-group">
+                        <h6><i class="fas fa-gamepad text-success"></i> Games</h6>
+                        <a href="{{ url_for('games_list', category='action') }}" class="btn btn-sm btn-light">Action</a>
+                        <a href="{{ url_for('games_list', category='strategy') }}" class="btn btn-sm btn-light">Strategy</a>
+                        <a href="{{ url_for('games_list', category='casual') }}" class="btn btn-sm btn-light">Casual</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Minimal JavaScript - only filter auto-submit, no search interference
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit filters when changed
+    const filterSelects = document.querySelectorAll('#searchFilters select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            this.closest('form').submit();
+        });
+    });
+});
+</script>
+{% endblock %}

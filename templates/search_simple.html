@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if query %}Search Results for "{{ query }}"{% else %}Search{% endif %} - installMOD</title>
+    <meta name="description" content="{% if query %}Search results for '{{ query }}' on installMOD. Find MOD APKs, games, and news articles.{% else %}Search for MOD APKs, games, and news on installMOD.{% endif %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+            
+            <div class="header-center">
+                <a href="{{ url_for('index') }}" class="brand-container">
+                    <div class="app-icon header-logo">
+                        <img src="https://locationlive.in/Jarmod/JarMOD-logo.webp" alt="installMOD Logo" style="width: 40px !important; height: 40px !important; max-width: 40px !important; max-height: 40px !important;">
+                    </div>
+                    <div class="brand-info">
+                        <div class="brand-name">installMOD</div>
+                        <div class="brand-tagline">Download & enjoy</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="header-right">
+                <a href="{{ url_for('apps_list') }}" class="btn btn-outline-light btn-sm">Apps</a>
+                <a href="{{ url_for('games_list') }}" class="btn btn-outline-light btn-sm">Games</a>
+                <a href="{{ url_for('news_list') }}" class="btn btn-outline-light btn-sm">News</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: 80px;">
+<div class="container py-4">
+    <!-- Search Header -->
+    <div class="search-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                {% if query %}
+                <h1>Search Results</h1>
+                <p class="lead">{{ total_results }} results found for "<strong>{{ query }}</strong>"</p>
+                {% else %}
+                <h1>Search</h1>
+                <p class="lead">Find apps, games, and news on installMOD</p>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <!-- Search Form -->
+                <form action="{{ url_for('search') }}" method="GET" class="search-form">
+                    <div class="input-group mb-3">
+                        <input type="text" name="q" class="form-control" placeholder="Search apps, games, news..." 
+                               value="{{ query }}" required>
+                        <button class="btn btn-success" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if query %}
+    <!-- Search Results -->
+    <div class="search-results">
+        {% if total_results > 0 %}
+        <!-- Results List -->
+        {% set all_results = apps + games + news %}
+        {% if sort_by == 'relevance' %}
+            {% set all_results = all_results|sort(attribute='relevance_score', reverse=true) %}
+        {% elif sort_by == 'name' %}
+            {% set all_results = all_results|sort(attribute='name') %}
+        {% endif %}
+        
+        {% for item in all_results %}
+        <a href="/{{ item.slug }}" class="app-card-link">
+            <div class="app-card mb-3">
+                <div class="app-icon">
+                    {% if item.type == 'news' %}
+                    <img src="{{ item.featured_image or 'https://via.placeholder.com/60x60?text=News' }}" alt="{{ item.title }}">
+                    {% else %}
+                    <img src="{{ item.icon }}" alt="{{ item.name }}">
+                    {% endif %}
+                </div>
+                <div class="app-info flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            {% if item.type == 'news' %}
+                            <h4>{{ item.title }}</h4>
+                            {% else %}
+                            <h4>{{ item.name }}</h4>
+                            {% endif %}
+                            <div class="app-details">
+                                {% if item.type == 'app' %}
+                                <i class="fas fa-mobile-alt text-primary"></i>
+                                <span>App • {{ item.version }} • {{ item.size }}</span>
+                                {% elif item.type == 'game' %}
+                                <i class="fas fa-gamepad text-success"></i>
+                                <span>Game • {{ item.version }} • {{ item.size }}</span>
+                                {% else %}
+                                <i class="fas fa-newspaper text-info"></i>
+                                <span>News • {{ item.date }}</span>
+                                {% endif %}
+                            </div>
+                            {% if item.type != 'news' and item.publisher %}
+                            <div class="app-features">
+                                <i class="fas fa-user text-muted"></i>
+                                <span>{{ item.publisher }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="text-end">
+                            {% if item.type != 'news' and item.rating %}
+                            <div class="rating">
+                                {% for i in range(1, 6) %}
+                                <i class="fas fa-star {% if i <= item.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="text-muted mt-2 mb-0">
+                        {% if item.type == 'news' %}
+                        {{ (item.excerpt or '')|truncate(120) }}
+                        {% else %}
+                        {{ (item.short_description or '')|truncate(120) }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+        {% else %}
+        <!-- No Results -->
+        <div class="no-results text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h3>No results found</h3>
+            <p class="text-muted">Try different search terms</p>
+            
+            {% if suggestions %}
+            <div class="mt-4">
+                <h5>Did you mean:</h5>
+                <ul class="list-inline">
+                    {% for suggestion in suggestions %}
+                    <li class="list-inline-item">
+                        <a href="{{ url_for('search', q=suggestion) }}" class="btn btn-outline-primary btn-sm">{{ suggestion }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="mt-4">
+                <h5>Popular searches:</h5>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="{{ url_for('search', q='spotify') }}" class="btn btn-outline-success btn-sm">Spotify</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('search', q='netflix') }}" class="btn btn-outline-success btn-sm">Netflix</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('search', q='tiktok') }}" class="btn btn-outline-success btn-sm">TikTok</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('search', q='games') }}" class="btn btn-outline-success btn-sm">Games</a></li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <!-- Empty Search State -->
+    <div class="empty-search-state text-center py-5">
+        <i class="fas fa-search fa-4x text-muted mb-4"></i>
+        <h2>Start Your Search</h2>
+        <p class="lead text-muted mb-4">Enter keywords to find apps, games, and news articles</p>
+        
+        <!-- Popular Searches -->
+        <div class="popular-searches mb-5">
+            <h5>Popular Searches</h5>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{{ url_for('search', q='spotify') }}" class="btn btn-outline-success">Spotify</a>
+                <a href="{{ url_for('search', q='netflix') }}" class="btn btn-outline-success">Netflix</a>
+                <a href="{{ url_for('search', q='tiktok') }}" class="btn btn-outline-success">TikTok</a>
+                <a href="{{ url_for('search', q='premium') }}" class="btn btn-outline-success">Premium</a>
+                <a href="{{ url_for('search', q='mod') }}" class="btn btn-outline-success">MOD</a>
+                <a href="{{ url_for('search', q='games') }}" class="btn btn-outline-success">Games</a>
+            </div>
+        </div>
+
+        <!-- Browse Categories -->
+        <div class="browse-categories">
+            <h5>Browse by Category</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="category-group">
+                        <h6><i class="fas fa-mobile-alt text-primary"></i> Apps</h6>
+                        <a href="{{ url_for('apps_list', category='social') }}" class="btn btn-sm btn-light">Social</a>
+                        <a href="{{ url_for('apps_list', category='entertainment') }}" class="btn btn-sm btn-light">Entertainment</a>
+                        <a href="{{ url_for('apps_list', category='productivity') }}" class="btn btn-sm btn-light">Productivity</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="category-group">
+                        <h6><i class="fas fa-gamepad text-success"></i> Games</h6>
+                        <a href="{{ url_for('games_list', category='action') }}" class="btn btn-sm btn-light">Action</a>
+                        <a href="{{ url_for('games_list', category='strategy') }}" class="btn btn-sm btn-light">Strategy</a>
+                        <a href="{{ url_for('games_list', category='casual') }}" class="btn btn-sm btn-light">Casual</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

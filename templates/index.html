@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}installMOD - Free MOD APK Downloads{% endblock %}
+
+{% block meta_description %}Download premium MOD APKs for Android. Get unlimited features, ad-free experiences, and premium unlocked apps and games. Safe, fast, and free downloads.{% endblock %}
+
+{% block canonical %}{{ url_for('index', _external=True) }}{% endblock %}
+
+{% block extra_head %}
+<!-- Schema.org JSON-LD for Website -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "INSTALLMOD.COM",
+  "description": "Premium MOD APKs and Android apps with unlimited features",
+  "url": "{{ url_for('index', _external=True) }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ url_for('search', _external=True) }}?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTALLMOD.COM",
+    "url": "{{ url_for('index', _external=True) }}",
+    "sameAs": [
+      "https://t.me/jarmodcom"
+    ]
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "Featured MOD APKs",
+    "numberOfItems": "{{ (indispensable_apps|length + latest_games|length + premium_apps|length) }}",
+    "itemListElement": [
+      {% for app in indispensable_apps[:3] %}
+      {
+        "@type": "SoftwareApplication",
+        "name": "{{ app.name }}",
+        "url": "{{ url_for('content_detail', slug=app.slug, _external=True) }}",
+        "applicationCategory": "{{ app.category }}",
+        "operatingSystem": "Android"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+      {% if latest_games %}
+        {% if indispensable_apps %},{% endif %}
+        {% for game in latest_games[:3] %}
+        {
+          "@type": "VideoGame",
+          "name": "{{ game.name }}",
+          "url": "{{ url_for('content_detail', slug=game.slug, _external=True) }}",
+          "genre": "{{ game.genre }}",
+          "gamePlatform": "Android"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      {% endif %}
+    ]
+  }
+}
+</script>
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "INSTALLMOD.COM",
+  "url": "{{ url_for('index', _external=True) }}",
+  "logo": "{{ url_for('static', filename='images/logo.png', _external=True) }}",
+  "description": "Leading platform for MOD APKs and premium Android applications",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "business@installmod.com",
+    "url": "{{ url_for('contact', _external=True) }}"
+  },
+  "sameAs": [
+    "https://t.me/jarmodcom"
+  ]
+}
+</script>
+
+<!-- Open Graph Tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="INSTALLMOD.COM - Premium MOD APKs for Android">
+<meta property="og:description" content="Download premium MOD APKs with unlimited features. Safe, fast, and free Android apps and games.">
+<meta property="og:url" content="{{ url_for('index', _external=True) }}">
+<meta property="og:site_name" content="INSTALLMOD.COM">
+<meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg', _external=True) }}">
+
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="INSTALLMOD.COM - Premium MOD APKs">
+<meta name="twitter:description" content="Download premium MOD APKs with unlimited features">
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="keywords" content="MOD APK, Android apps, premium unlocked, free download, unlimited features, ad-free apps">
+<meta name="theme-color" content="#7CB342">
+{% endblock %}
+
+{% block content %}
+    <!-- News Section -->
+    <section class="news-section">
+        <div class="container">
+            <h2>Latest News</h2>
+            {% for article in news %}
+            <a href="/{{ article.slug }}" class="news-card-link">
+                <div class="news-card">
+                    {% if article.featured_image %}
+                    <div class="news-image">
+                        <img src="{{ article.featured_image }}" alt="{{ article.title }}">
+                    </div>
+                    {% endif %}
+                    <div class="news-content">
+                        <h3>{{ article.title }}</h3>
+                        <p class="news-excerpt">{{ article.excerpt[:100] }}{% if article.excerpt|length > 100 %}...{% endif %}</p>
+                        <div class="news-meta">
+                            {% if article.author %}
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                {{ article.author }}
+                            </span>
+                            {% endif %}
+                            {% if article.date %}
+                            <span class="date">
+                                <i class="fas fa-calendar"></i>
+                                {{ article.date }}
+                            </span>
+                            {% endif %}
+                            {% if article.category %}
+                            <span class="badge bg-primary">{{ article.category }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Indispensable Section -->
+    <section class="indispensable-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Indispensable</h2>
+                <a href="{{ url_for('apps_list', category='indispensable') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for app in indispensable_apps %}
+            <a href="/{{ app.slug }}" class="app-card-link">
+                <div class="app-card">
+                    <div class="app-icon">
+                        <img src="{{ app.icon }}" alt="{{ app.name }}">
+                    </div>
+                    <div class="app-info">
+                        <h4>{{ app.name }}</h4>
+                        <div class="app-details">
+                            <i class="fas fa-download text-danger"></i>
+                            <span>{{ app.version }} + {{ app.size }}</span>
+                        </div>
+                        <div class="app-features">
+                            <i class="fas fa-times text-danger"></i>
+                            <span>{{ app.features|join(', ') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Editor's Choice Section -->
+    <section class="editors-choice-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Editor's Choice</h2>
+                <a href="{{ url_for('apps_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for item in editors_choice %}
+            <a href="/{{ item.slug }}" class="app-card-link">
+                <div class="app-card">
+                    <div class="app-icon">
+                        <img src="{{ item.icon }}" alt="{{ item.name }}">
+                    </div>
+                    <div class="app-info">
+                        <h4>{{ item.name }}</h4>
+                        <div class="app-details">
+                            <i class="fas fa-download text-danger"></i>
+                            <span>{{ item.version }} + {{ item.size }}</span>
+                        </div>
+                        <div class="app-features">
+                            <i class="fas fa-times text-danger"></i>
+                            <span>{{ item.features|join(', ') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Games Latest Section -->
+    <section class="games-latest-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Games - Latest</h2>
+                <a href="{{ url_for('games_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for game in latest_games %}
+            <a href="/{{ game.slug }}" class="app-card-link">
+                <div class="app-card">
+                    <div class="app-icon">
+                        <img src="{{ game.icon }}" alt="{{ game.name }}">
+                    </div>
+                    <div class="app-info">
+                        <h4>{{ game.name }}</h4>
+                        <div class="app-details">
+                            <i class="fas fa-download text-danger"></i>
+                            <span>{{ game.version }} + {{ game.size }}</span>
+                        </div>
+                        <div class="app-features">
+                            <i class="fas fa-times text-danger"></i>
+                            <span>{{ game.features|join(', ') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Premium Latest Section -->
+    <section class="premium-latest-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Premium - Latest</h2>
+                <a href="{{ url_for('apps_list', category='premium') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for app in premium_apps %}
+            <a href="/{{ app.slug }}" class="app-card-link">
+                <div class="app-card">
+                    <div class="app-icon">
+                        <img src="{{ app.icon }}" alt="{{ app.name }}">
+                    </div>
+                    <div class="app-info">
+                        <h4>{{ app.name }}</h4>
+                        <div class="app-details">
+                            <i class="fas fa-download text-danger"></i>
+                            <span>{{ app.version }} + {{ app.size }}</span>
+                        </div>
+                        <div class="app-features">
+                            <i class="fas fa-times text-danger"></i>
+                            <span>{{ app.features|join(', ') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

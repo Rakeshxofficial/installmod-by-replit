@@ -1,0 +1,192 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Apps{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-mobile-alt me-2"></i>Manage Apps</h1>
+    <a href="{{ url_for('admin.add_app') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add New App
+    </a>
+</div>
+
+<!-- Search and Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-8">
+                <input type="text" class="form-control" name="search" value="{{ search }}" placeholder="Search apps by name...">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+                <a href="{{ url_for('admin.apps_list') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-2"></i>Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Apps Table -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Apps List ({{ apps.total }} total)</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if apps.items %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Publisher</th>
+                        <th>Version</th>
+                        <th>Downloads</th>
+                        <th>Rating</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in apps.items %}
+                    <tr>
+                        <td>
+                            {% if app.icon %}
+                                <img src="{{ app.icon }}" alt="{{ app.name }}" style="width: 40px; height: 40px; border-radius: 8px;">
+                            {% else %}
+                                <div class="bg-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 8px;">
+                                    <i class="fas fa-mobile-alt text-white"></i>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="fw-bold">{{ app.name }}</div>
+                            <small class="text-muted">{{ app.slug }}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ app.category or 'Uncategorized' }}</span>
+                        </td>
+                        <td>{{ app.publisher or '-' }}</td>
+                        <td>{{ app.version }}</td>
+                        <td>{{ app.download_count or '0' }}</td>
+                        <td>
+                            {% if app.rating %}
+                                <div class="d-flex align-items-center">
+                                    <span class="me-1">{{ app.rating }}</span>
+                                    <div class="text-warning">
+                                        {% for i in range(5) %}
+                                            {% if i < app.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <span class="text-muted">No rating</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="/{{ app.slug }}" class="btn btn-outline-info" target="_blank" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('admin.edit_app', app_id=app.id) }}" class="btn btn-outline-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('{{ app.name }}', '{{ url_for('admin.delete_app', app_id=app.id) }}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-mobile-alt fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No apps found</h5>
+            <p class="text-muted">Start by adding your first app</p>
+            <a href="{{ url_for('admin.add_app') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add New App
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if apps.pages > 1 %}
+<nav aria-label="Apps pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if apps.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('admin.apps_list', page=apps.prev_num, search=search) }}">Previous</a>
+            </li>
+        {% endif %}
+        
+        {% for page_num in apps.iter_pages() %}
+            {% if page_num %}
+                {% if page_num != apps.page %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin.apps_list', page=page_num, search=search) }}">{{ page_num }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                {% endif %}
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if apps.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('admin.apps_list', page=apps.next_num, search=search) }}">Next</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<span id="deleteItemName"></span>"?</p>
+                <p class="text-danger"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete(itemName, deleteUrl) {
+    document.getElementById('deleteItemName').textContent = itemName;
+    document.getElementById('deleteForm').action = deleteUrl;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

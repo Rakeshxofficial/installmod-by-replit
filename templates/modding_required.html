@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Modding Required - INSTALLMOD.COM{% endblock %}
+
+{% block description %}Request custom MOD APKs and modifications. Submit your requirements for apps you'd like to see modded with premium features unlocked.{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Modding Required</h1>
+        <p class="lead">Request custom MOD APKs tailored to your needs</p>
+    </div>
+
+    <div class="content-page">
+        <div class="modding-intro">
+            <h2>Custom MOD Development</h2>
+            <p>Can't find the MOD APK you're looking for? Our experienced development team can create custom modifications for almost any Android application. Submit your requirements and we'll work on bringing your desired features to life.</p>
+        </div>
+
+        <div class="process-section">
+            <h2>How It Works</h2>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Submit Request</h3>
+                        <p>Fill out the form below with detailed information about the app and features you want modded.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Analysis & Quote</h3>
+                        <p>Our team analyzes the app's complexity and provides a timeline and requirements assessment.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Development</h3>
+                        <p>Our developers create the MOD with requested features while ensuring security and stability.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Testing & Release</h3>
+                        <p>Thorough testing is conducted before the MOD is released to ensure quality and functionality.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="request-form-section">
+            <h2>Submit MOD Request</h2>
+            <form class="mod-request-form" id="modRequestForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appName">App Name*</label>
+                        <input type="text" id="appName" name="appName" required placeholder="e.g., Spotify, Instagram, Netflix">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appPackage">Package Name (if known)</label>
+                        <input type="text" id="appPackage" name="appPackage" placeholder="e.g., com.spotify.music">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appVersion">Current App Version</label>
+                        <input type="text" id="appVersion" name="appVersion" placeholder="e.g., 8.7.56.1124">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Priority Level</label>
+                        <select id="priority" name="priority" required>
+                            <option value="">Select Priority</option>
+                            <option value="low">Low - No rush</option>
+                            <option value="medium">Medium - Standard timeline</option>
+                            <option value="high">High - Urgent request</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="playStoreLink">Google Play Store Link</label>
+                    <input type="url" id="playStoreLink" name="playStoreLink" placeholder="https://play.google.com/store/apps/details?id=...">
+                </div>
+
+                <div class="form-group">
+                    <label for="requiredFeatures">Required MOD Features*</label>
+                    <textarea id="requiredFeatures" name="requiredFeatures" rows="5" required placeholder="Describe in detail what features you want modded:
+- Premium features unlocked
+- Ad removal
+- Unlimited resources
+- Bypass restrictions
+- Additional functionality
+etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalInfo">Additional Information</label>
+                    <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any additional details, special requirements, or notes about the app or desired modifications..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactName">Your Name*</label>
+                        <input type="text" id="contactName" name="contactName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Your Email*</label>
+                        <input type="email" id="contactEmail" name="contactEmail" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactTelegram">Telegram Username (Optional)</label>
+                    <input type="text" id="contactTelegram" name="contactTelegram" placeholder="@yourusername">
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-code"></i>
+                    Submit MOD Request
+                </button>
+            </form>
+        </div>
+
+        <div class="guidelines-section">
+            <h2>Request Guidelines</h2>
+            <div class="guidelines-grid">
+                <div class="guideline-item">
+                    <h3>Supported Apps</h3>
+                    <ul>
+                        <li>Most Android applications</li>
+                        <li>Popular games and productivity apps</li>
+                        <li>Social media and entertainment apps</li>
+                        <li>Educational and utility apps</li>
+                    </ul>
+                </div>
+
+                <div class="guideline-item">
+                    <h3>Common MOD Features</h3>
+                    <ul>
+                        <li>Premium features unlock</li>
+                        <li>Advertisement removal</li>
+                        <li>Unlimited coins/gems/resources</li>
+                        <li>Pro version features</li>
+                        <li>Bypass geographical restrictions</li>
+                    </ul>
+                </div>
+
+                <div class="guideline-item">
+                    <h3>Development Time</h3>
+                    <ul>
+                        <li>Simple MODs: 2-5 days</li>
+                        <li>Medium complexity: 1-2 weeks</li>
+                        <li>Complex MODs: 2-4 weeks</li>
+                        <li>Priority requests: Expedited</li>
+                    </ul>
+                </div>
+
+                <div class="guideline-item">
+                    <h3>Important Notes</h3>
+                    <ul>
+                        <li>We respect app developers' rights</li>
+                        <li>Educational and research purposes</li>
+                        <li>No harmful or malicious modifications</li>
+                        <li>Quality and security guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-alternatives">
+            <h2>Alternative Contact Methods</h2>
+            <div class="contact-options">
+                <div class="contact-option">
+                    <i class="fab fa-telegram"></i>
+                    <div>
+                        <h3>Telegram Bot</h3>
+                        <p>Quick requests via our bot</p>
+                        <a href="https://t.me/JarMODbot" target="_blank">@JarMODbot</a>
+                    </div>
+                </div>
+
+                <div class="contact-option">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h3>Email</h3>
+                        <p>Detailed requests and inquiries</p>
+                        <a href="mailto:business@installmod.com">business@installmod.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('modRequestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect form data
+    const formData = {
+        appName: document.getElementById('appName').value,
+        appPackage: document.getElementById('appPackage').value,
+        appVersion: document.getElementById('appVersion').value,
+        priority: document.getElementById('priority').value,
+        playStoreLink: document.getElementById('playStoreLink').value,
+        requiredFeatures: document.getElementById('requiredFeatures').value,
+        additionalInfo: document.getElementById('additionalInfo').value,
+        contactName: document.getElementById('contactName').value,
+        contactEmail: document.getElementById('contactEmail').value,
+        contactTelegram: document.getElementById('contactTelegram').value
+    };
+    
+    // Create email body
+    const emailBody = `MOD REQUEST SUBMISSION
+
+App Details:
+- App Name: ${formData.appName}
+- Package Name: ${formData.appPackage || 'Not provided'}
+- Current Version: ${formData.appVersion || 'Not provided'}
+- Play Store Link: ${formData.playStoreLink || 'Not provided'}
+- Priority: ${formData.priority}
+
+Required MOD Features:
+${formData.requiredFeatures}
+
+Additional Information:
+${formData.additionalInfo || 'None provided'}
+
+Contact Details:
+- Name: ${formData.contactName}
+- Email: ${formData.contactEmail}
+- Telegram: ${formData.contactTelegram || 'Not provided'}
+
+---
+Submitted via INSTALLMOD.COM Modding Request Form`;
+
+    // Create mailto link
+    const subject = `MOD Request: ${formData.appName} - ${formData.priority.toUpperCase()} Priority`;
+    const mailtoLink = `mailto:business@installmod.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+    
+    // Show success message
+    alert('Thank you for your MOD request! Your email client should open with the pre-filled request. Our team will review your submission and get back to you within 24-48 hours.');
+    
+    // Reset form
+    this.reset();
+});
+</script>
+{% endblock %}

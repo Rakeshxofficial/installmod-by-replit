@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}{{ game.name }} MOD APK v{{ game.version }} - {{ game.features|join(', ') }}{% endblock %}
+
+{% block description %}Download {{ game.name }} MOD APK v{{ game.version }} for Android. {{ game.description }} Features: {{ game.features|join(', ') }}.{% endblock %}
+
+{% block canonical %}{% if is_subdomain %}{{ request.url }}{% else %}https://{{ game.slug }}.{{ request.host.replace('www.', '') }}{% endif %}{% endblock %}
+
+{% block og_title %}{{ game.name }} v{{ game.version }} MOD APK - Free Download{% endblock %}
+
+{% block og_description %}{{ game.description }}{% endblock %}
+
+{% block og_image %}{{ game.featured_image or game.icon }}{% endblock %}
+
+{% block twitter_title %}{{ game.name }} v{{ game.version }} MOD APK{% endblock %}
+
+{% block twitter_description %}{{ game.description }}{% endblock %}
+
+{% block twitter_image %}{{ game.featured_image or game.icon }}{% endblock %}
+
+{% block keywords %}{{ game.name }}, MOD APK, {{ game.category }}, {{ game.genre }}, Android game, Premium unlocked, {{ game.mod_info }}{% endblock %}
+
+{% block robots %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endblock %}
+
+{% block extra_head %}
+<!-- Schema.org JSON-LD for Game -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "{{ game.name }}",
+  "description": "{{ game.description }}",
+  "applicationCategory": "Game",
+  "operatingSystem": "Android",
+  "softwareVersion": "{{ game.version }}",
+  "fileSize": "{{ game.size }}",
+  "dateModified": "{{ game.last_updated }}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ game.rating or 4.5 }}",
+    "ratingCount": "{{ game.votes or 1000 }}",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ game.publisher }}",
+    "url": "{{ url_for('publisher_detail', slug=(game.publisher | publisher_to_slug), _external=True) }}"
+  },
+  "downloadUrl": "{{ game.download_link or url_for('content_detail', slug=game.slug, _external=True) }}",
+  "image": "{{ game.icon }}",
+  "screenshot": [
+    {% if game.screenshots %}
+      {% for screenshot in game.screenshots %}
+        "{{ screenshot }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+  ],
+  "genre": "{{ game.genre }}",
+  "gameItem": "{{ game.name }}",
+  "gamePlatform": "Android",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "keywords": "{{ game.name }}, MOD APK, {{ game.category }}, {{ game.genre }}, Android game, {{ game.mod_info }}",
+  "author": {
+    "@type": "Organization",
+    "name": "INSTALLMOD.COM",
+    "url": "{{ url_for('index', _external=True) }}"
+  },
+  "mainEntity": {
+    "@type": "WebPage",
+    "@id": "{{ url_for('content_detail', slug=game.slug, _external=True) }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Game Header -->
+    <div class="app-header">
+        <div class="row align-items-center">
+            <div class="col-3 col-md-2">
+                <img src="{{ game.icon }}" alt="{{ game.name }}" class="app-icon-large">
+            </div>
+            <div class="col-9 col-md-10">
+                <h1 class="app-title">{{ game.name }}</h1>
+                <div class="app-meta">
+                    <span class="badge bg-success">v{{ game.version }}</span>
+                    <span class="badge bg-info">{{ game.size }}</span>
+                    <span class="badge bg-warning">{{ game.download_count }}</span>
+                </div>
+                <div class="app-rating">
+                    {% for i in range(5) %}
+                        {% if i < game.rating %}
+                            <i class="fas fa-star text-warning"></i>
+                        {% else %}
+                            <i class="far fa-star text-warning"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <span class="ms-2">{{ game.rating }}/5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Button -->
+    <div class="download-section">
+        {% if game.download_link %}
+        <a href="{{ game.download_link }}" class="btn btn-success btn-lg w-100" target="_blank" rel="noopener">
+            <i class="fas fa-download me-2"></i>
+            Download {{ game.name }} MOD APK
+        </a>
+        {% else %}
+        <button class="btn btn-success btn-lg w-100" onclick="alert('Download link not available')">
+            <i class="fas fa-download me-2"></i>
+            Download {{ game.name }} MOD APK
+        </button>
+        {% endif %}
+    </div>
+
+    <!-- Game Features -->
+    <div class="app-features-section">
+        <h3>MOD Features</h3>
+        <ul class="features-list">
+            {% for feature in game.features %}
+            <li><i class="fas fa-check text-success me-2"></i>{{ feature }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Game Description -->
+    <div class="app-description">
+        <h3>Description</h3>
+        <p>{{ game.description }}</p>
+    </div>
+
+    <!-- Screenshots -->
+    {% if game.screenshots %}
+    <div class="screenshots-section">
+        <h3>Screenshots</h3>
+        <div class="row">
+            {% for screenshot in game.screenshots %}
+            <div class="col-6 col-md-4 mb-3">
+                <img src="{{ screenshot }}" alt="Screenshot" class="img-fluid rounded">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Game Info -->
+    <div class="app-info-section">
+        <h3>Game Information</h3>
+        <table class="table table-striped">
+            <tr>
+                <td><strong>Version</strong></td>
+                <td>{{ game.version }}</td>
+            </tr>
+            <tr>
+                <td><strong>Size</strong></td>
+                <td>{{ game.size }}</td>
+            </tr>
+            <tr>
+                <td><strong>Category</strong></td>
+                <td>{{ game.category|title }}</td>
+            </tr>
+            <tr>
+                <td><strong>Downloads</strong></td>
+                <td>{{ game.download_count }}</td>
+            </tr>
+            <tr>
+                <td><strong>Rating</strong></td>
+                <td>{{ game.rating }}/5</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- More from Developer -->
+    {% if related_games %}
+    <div class="more-from-developer">
+        <h3>More from Developer</h3>
+        <div class="app-cards">
+            {% for related_game in related_games %}
+            <a href="{{ url_for('content_detail', slug=related_game.slug) }}" class="app-card-link">
+                <div class="app-card">
+                    <img src="{{ related_game.icon }}" alt="{{ related_game.name }}" class="app-icon">
+                    <div class="app-info">
+                        <h4>{{ related_game.name }}</h4>
+                        <div class="app-meta">
+                            <i class="fas fa-hdd"></i> {{ related_game.version }} + {{ related_game.size }}
+                        </div>
+                        <div class="mod-badge">
+                            <i class="fas fa-wrench"></i> {{ related_game.mod_info }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recommended for You -->
+    {% if recommended_games %}
+    <div class="recommended-section">
+        <h3>Recommended for You</h3>
+        <div class="app-cards">
+            {% for rec_game in recommended_games %}
+            <a href="{{ url_for('content_detail', slug=rec_game.slug) }}" class="app-card-link">
+                <div class="app-card">
+                    <img src="{{ rec_game.icon }}" alt="{{ rec_game.name }}" class="app-icon">
+                    <div class="app-info">
+                        <h4>{{ rec_game.name }}</h4>
+                        <div class="app-meta">
+                            <i class="fas fa-hdd"></i> {{ rec_game.version }} + {{ rec_game.size }}
+                        </div>
+                        <div class="mod-badge">
+                            <i class="fas fa-wrench"></i> {{ rec_game.mod_info }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

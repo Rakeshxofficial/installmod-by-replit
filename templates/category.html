@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if query %}
+Search Results for "{{ query }}"
+{% elif category %}
+{{ category|title }} {{ type|title }}
+{% else %}
+{{ type|title }}
+{% endif %}
+{% endblock %}
+
+{% block description %}
+{% if query %}
+Search results for "{{ query }}". Find the best MOD APKs for your search query.
+{% elif category %}
+Download the best {{ category }} {{ type }} with premium features unlocked. Free MOD APK downloads.
+{% else %}
+Browse all {{ type }} with premium features unlocked. Free MOD APK downloads for Android.
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>
+            {% if query %}
+                Search Results for "{{ query }}"
+            {% elif category %}
+                {{ category|title }} {{ type|title }}
+            {% else %}
+                All {{ type|title }}
+            {% endif %}
+        </h1>
+        <p class="text-muted">
+            {% if items %}
+                Found {{ items|length }} results
+            {% else %}
+                No results found
+            {% endif %}
+        </p>
+    </div>
+
+    {% if items %}
+    <div class="items-grid">
+        {% for item in items %}
+        <div class="app-card">
+            <div class="app-icon">
+                <img src="{{ item.icon }}" alt="{{ item.name }}">
+            </div>
+            <div class="app-info">
+                <h4>
+                    {% if item.get('type') == 'game' or item.category in ['action', 'arcade', 'adventure', 'strategy'] %}
+                        <a href="/{{ item.slug }}">{{ item.name }}</a>
+                    {% else %}
+                        <a href="/{{ item.slug }}">{{ item.name }}</a>
+                    {% endif %}
+                </h4>
+                <div class="app-details">
+                    <i class="fas fa-download text-danger"></i>
+                    <span>{{ item.version }} + {{ item.size }}</span>
+                </div>
+                <div class="app-features">
+                    <i class="fas fa-times text-danger"></i>
+                    <span>{{ item.features|join(', ') }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="text-center">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h3>No Results Found</h3>
+            {% if query %}
+                <p class="text-muted">Try searching with different keywords or browse our categories.</p>
+            {% elif category %}
+                <p class="text-muted">No {{ type }} found in the {{ category }} category.</p>
+            {% else %}
+                <p class="text-muted">No {{ type }} available at the moment.</p>
+            {% endif %}
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

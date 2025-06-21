@@ -1,0 +1,163 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-tags me-2"></i>Categories Management</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-mobile-alt me-2"></i>App Categories</h5>
+            </div>
+            <div class="card-body">
+                {% if app_categories %}
+                    <div class="list-group">
+                        {% for category in app_categories %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ category }}</span>
+                            <div>
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ app_category_counts[category] }} apps
+                                </span>
+                                <a href="{{ url_for('admin.apps_list') }}?category={{ category }}" class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No app categories found</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-gamepad me-2"></i>Game Categories</h5>
+            </div>
+            <div class="card-body">
+                {% if game_categories %}
+                    <div class="list-group">
+                        {% for category in game_categories %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ category }}</span>
+                            <div>
+                                <span class="badge bg-success rounded-pill">
+                                    {{ game_category_counts[category] }} games
+                                </span>
+                                <a href="{{ url_for('admin.games_list') }}?category={{ category }}" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No game categories found</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Category Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="appCategoriesChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="gameCategoriesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// App Categories Chart
+const appCtx = document.getElementById('appCategoriesChart').getContext('2d');
+const appChart = new Chart(appCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ app_categories | tojson }},
+        datasets: [{
+            data: [
+                {% for category in app_categories %}
+                {{ app_category_counts[category] }}{{ "," if not loop.last else "" }}
+                {% endfor %}
+            ],
+            backgroundColor: [
+                '#2c5530', '#4a7c59', '#6b9b76', '#8cb993', '#add8b0',
+                '#ff6b35', '#e55a2b', '#cb4921', '#b13817', '#97270d'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'App Categories Distribution'
+            },
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Game Categories Chart
+const gameCtx = document.getElementById('gameCategoriesChart').getContext('2d');
+const gameChart = new Chart(gameCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ game_categories | tojson }},
+        datasets: [{
+            data: [
+                {% for category in game_categories %}
+                {{ game_category_counts[category] }}{{ "," if not loop.last else "" }}
+                {% endfor %}
+            ],
+            backgroundColor: [
+                '#2c5530', '#4a7c59', '#6b9b76', '#8cb993', '#add8b0',
+                '#ff6b35', '#e55a2b', '#cb4921', '#b13817', '#97270d'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Game Categories Distribution'
+            },
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

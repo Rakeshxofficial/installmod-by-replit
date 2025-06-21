@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}Publishers - JARMOD.COM{% endblock %}
+
+{% block meta_description %}Browse all publishers and developers featured on JARMOD.COM. Find apps and games from your favorite developers.{% endblock %}
+
+{% block content %}
+<div class="publishers-page">
+    <!-- Hero Section -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title">Publishers & Developers</h1>
+            <p class="page-description">Discover apps and games from top publishers and independent developers</p>
+        </div>
+    </div>
+
+    <!-- Publishers Grid -->
+    <div class="container">
+        <div class="publishers-grid">
+            {% for publisher in publishers %}
+            <div class="publisher-card">
+                <a href="{{ url_for('publisher_detail', slug=publisher.slug) }}" class="publisher-link">
+                    <div class="publisher-avatar">
+                        {{ publisher.name[0].upper() }}
+                    </div>
+                    <div class="publisher-info">
+                        <h3 class="publisher-name">{{ publisher.name }}</h3>
+                        <div class="publisher-stats">
+                            <span class="stat-item">
+                                <i class="fas fa-mobile-alt"></i>
+                                {{ publisher.app_count }} Apps
+                            </span>
+                            <span class="stat-item">
+                                <i class="fas fa-gamepad"></i>
+                                {{ publisher.game_count }} Games
+                            </span>
+                        </div>
+                        <div class="publisher-total">
+                            Total: {{ publisher.total_count }} items
+                        </div>
+                    </div>
+                    <div class="publisher-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if not publishers %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <h3>No Publishers Found</h3>
+            <p>There are currently no publishers available.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.publishers-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #2c5530, #4a7c59);
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.publishers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+.publisher-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.publisher-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.publisher-link {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.publisher-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #2c5530, #4a7c59);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.publisher-info {
+    flex: 1;
+}
+
+.publisher-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c5530;
+    margin-bottom: 0.5rem;
+}
+
+.publisher-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-item i {
+    color: #2c5530;
+}
+
+.publisher-total {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.publisher-arrow {
+    color: #2c5530;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 2rem 0;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .publishers-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+    
+    .publisher-link {
+        padding: 1rem;
+    }
+    
+    .publisher-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+    
+    .publisher-name {
+        font-size: 1.1rem;
+    }
+    
+    .publisher-stats {
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        font-size: 0.8rem;
+    }
+}
+</style>
+{% endblock %}

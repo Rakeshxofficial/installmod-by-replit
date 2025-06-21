@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.meta_title if article.meta_title else article.title }}{% endblock %}
+
+{% block meta_description %}{{ article.meta_description if article.meta_description else article.excerpt }}{% endblock %}
+
+{% block canonical %}{{ url_for('content_detail', slug=article.slug, _external=True) }}{% endblock %}
+
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.excerpt }}{% endblock %}
+{% block og_image %}{{ article.featured_image }}{% endblock %}
+
+{% block twitter_title %}{{ article.title }}{% endblock %}
+{% block twitter_description %}{{ article.excerpt }}{% endblock %}
+{% block twitter_image %}{{ article.featured_image }}{% endblock %}
+
+{% block extra_head %}
+<!-- Schema.org JSON-LD for News Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "{{ article.title }}",
+  "description": "{{ article.excerpt }}",
+  "image": "{{ article.featured_image }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author }}",
+    "url": "{{ url_for('index', _external=True) }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "INSTALLMOD.COM",
+    "url": "{{ url_for('index', _external=True) }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ url_for('static', filename='images/logo.png', _external=True) }}"
+    }
+  },
+  "datePublished": "{{ article.created_at.isoformat() + '+00:00' if article.created_at else '2025-06-14T12:00:00+00:00' }}",
+  "dateModified": "{{ article.updated_at.isoformat() + '+00:00' if article.updated_at else '2025-06-14T12:00:00+00:00' }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ url_for('content_detail', slug=article.slug, _external=True) }}"
+  },
+  "articleSection": "{{ article.category }}",
+  "keywords": "{% if article.tags %}{% set parsed_tags = article.tags | from_json %}{{ parsed_tags | join(', ') if parsed_tags else 'MOD APK, Android, Mobile Apps, Gaming' }}{% else %}MOD APK, Android, Mobile Apps, Gaming{% endif %}",
+  "wordCount": "{{ article.content | length if article.content else 500 }}",
+  "inLanguage": "en-US",
+  "url": "{{ url_for('content_detail', slug=article.slug, _external=True) }}"
+}
+</script>
+
+<!-- Article-specific meta tags -->
+<meta property="og:type" content="article">
+<meta property="article:author" content="{{ article.author }}">
+<meta property="article:published_time" content="{{ article.date }}">
+<meta property="article:section" content="{{ article.category }}">
+<meta property="article:tag" content="{% if article.tags %}{% set parsed_tags = article.tags | from_json %}{{ parsed_tags | join(', ') if parsed_tags else 'MOD APK' }}{% else %}MOD APK{% endif %}">
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="author" content="{{ article.author }}">
+<meta name="publisher" content="INSTALLMOD.COM">
+<meta name="article:author" content="{{ article.author }}">
+<meta name="article:published_time" content="{{ article.date }}">
+<meta name="article:section" content="{{ article.category }}">
+<meta name="keywords" content="{{ article.title }}, {{ article.category }}, MOD APK news, Android updates, {% if article.tags %}{% set parsed_tags = article.tags | from_json %}{{ parsed_tags | join(', ') if parsed_tags else 'mobile gaming' }}{% else %}mobile gaming{% endif %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="news-article">
+        <div class="article-header">
+            <h1 class="article-title">{{ article.title }}</h1>
+            <div class="article-meta">
+                <span class="text-muted">
+                    <i class="fas fa-user me-1"></i>{{ article.author }}
+                </span>
+                <span class="text-muted ms-3">
+                    <i class="fas fa-calendar me-1"></i>{{ article.date }}
+                </span>
+                <span class="badge bg-primary ms-3">{{ article.category|title }}</span>
+            </div>
+        </div>
+
+        {% if article.featured_image %}
+        <div class="article-image mb-4">
+            <img src="{{ article.featured_image }}" alt="{{ article.title }}" class="img-fluid rounded shadow-sm">
+        </div>
+        {% endif %}
+
+        <div class="article-content">
+            {% if article_dict.content_html %}
+                {{ article_dict.content_html|safe }}
+            {% else %}
+                <p>{{ article.excerpt }}</p>
+                {% if article.content %}
+                    <div class="article-body">
+                        {{ article.content|markdown|safe }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="article-footer">
+            <div class="article-tags">
+                <span class="badge bg-secondary">{{ article.category|title }}</span>
+            </div>
+            
+            <div class="article-share">
+                <h6>Share this article:</h6>
+                <a href="#" class="btn btn-sm btn-outline-primary" onclick="shareOn('facebook'); return false;">
+                    <i class="fab fa-facebook"></i> Facebook
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-info" onclick="shareOn('twitter'); return false;">
+                    <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-success" onclick="shareOn('whatsapp'); return false;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Related News Section -->
+    {% if related_news and related_news|length > 0 %}
+    <section class="related-news mt-5">
+        <div class="section-header mb-4">
+            <h3 class="section-title">Related News</h3>
+            <p class="section-subtitle text-muted">More articles you might be interested in</p>
+        </div>
+        
+        <div class="row">
+            {% for news in related_news %}
+            <div class="col-md-4 mb-4">
+                <div class="card news-card h-100">
+                    {% if news.featured_image %}
+                    <div class="card-img-wrapper">
+                        <img src="{{ news.featured_image }}" class="card-img-top" alt="{{ news.title }}">
+                        <div class="card-img-overlay-badge">
+                            <span class="badge bg-primary">{{ news.category|title }}</span>
+                        </div>
+                        <div class="card-img-caption">
+                            <span class="caption-text">{{ news.title }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{{ url_for('content_detail', slug=news.slug) }}" class="text-decoration-none">
+                                {{ news.title }}
+                            </a>
+                        </h5>
+                        
+                        <p class="card-text text-muted small flex-grow-1">
+                            {{ news.excerpt[:100] }}{% if news.excerpt|length > 100 %}...{% endif %}
+                        </p>
+                        
+                        <div class="card-footer-info mt-auto">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ news.date }}
+                                {% if news.author %}
+                                <span class="ms-2">
+                                    <i class="fas fa-user me-1"></i>{{ news.author }}
+                                </span>
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('news_list') }}" class="btn btn-outline-primary">
+                <i class="fas fa-newspaper me-2"></i>View All News
+            </a>
+        </div>
+    </section>
+    {% endif %}
+
+    <div class="back-to-news mt-5">
+        <a href="{{ url_for('news_list') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to News
+        </a>
+    </div>
+</div>
+
+<script>
+// Social sharing functionality
+function shareOn(platform) {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    const description = encodeURIComponent(document.querySelector('meta[name="description"]')?.content || '{{ article.excerpt }}');
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            break;
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            break;
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${title}%20${url}`;
+            break;
+        case 'linkedin':
+            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+            break;
+        case 'pinterest':
+            const imageUrl = encodeURIComponent('{{ article.featured_image or url_for("static", filename="images/og-image.jpg", _external=True) }}');
+            shareUrl = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${title}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${title}&body=Check out this article: ${url}`;
+            break;
+        default:
+            console.log('Unknown platform:', platform);
+            return;
+    }
+    
+    if (platform === 'email') {
+        window.location.href = shareUrl;
+    } else {
+        window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
+    }
+    
+    // Track the share event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'share', {
+            method: platform,
+            content_type: 'article',
+            item_id: '{{ article.slug }}'
+        });
+    }
+}
+</script>
+{% endblock %}

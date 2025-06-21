@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Optimized for better indexing -->
+    <meta http-equiv="Cache-Control" content="public, max-age=3600">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <title>{% block title %}INSTALLMOD.COM - Free MOD APK Download{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Download the latest MOD APKs for Android. Premium apps, games, and tools with unlocked features. Safe, fast, and free downloads.{% endblock %}">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="robots" content="{% block robots %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endblock %}">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="bingbot" content="index, follow">
+    <meta name="author" content="INSTALLMOD.COM">
+    <meta name="publisher" content="INSTALLMOD.COM">
+    <meta name="language" content="en">
+    <meta name="geo.region" content="US">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta name="revisit-after" content="1 day">
+    <meta name="keywords" content="{% block keywords %}MOD APK, Android apps, premium unlocked, free download, unlimited features, ad-free apps{% endblock %}">
+    <!-- Canonical URL with subdomain support -->
+    {% if canonical_url %}
+        <link rel="canonical" href="{{ canonical_url }}">
+    {% elif app and not is_subdomain %}
+        <link rel="canonical" href="https://{{ app.slug }}.{{ request.host.replace('www.', '') }}">
+    {% elif game and not is_subdomain %}
+        <link rel="canonical" href="https://{{ game.slug }}.{{ request.host.replace('www.', '') }}">
+    {% else %}
+        <link rel="canonical" href="{% block canonical %}{{ request.url.split('?')[0] }}{% endblock %}">
+    {% endif %}
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}INSTALLMOD.COM - Free MOD APK Download{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Download the latest MOD APKs for Android. Premium apps, games, and tools with unlocked features.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/og-image.jpg') }}{% endblock %}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="INSTALLMOD.COM">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}INSTALLMOD.COM - Free MOD APK Download{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Download the latest MOD APKs for Android. Premium apps, games, and tools with unlocked features.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ url_for('static', filename='images/og-image.jpg') }}{% endblock %}">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#7CB342">
+    <meta name="msapplication-TileColor" content="#7CB342">
+    <meta name="application-name" content="INSTALLMOD.COM">
+    <meta name="apple-mobile-web-app-title" content="installMOD">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='images/favicon-96x96.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='images/site.webmanifest') }}">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4MFRD9NX5J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4MFRD9NX5J');
+    </script>
+    
+    <!-- Google AdSense -->
+    <!-- Preconnect to Google services for faster loading -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+    
+    <!-- Load Google AdSense with optimized loading (Note: External scripts cannot be minified) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4858972826245644"
+         crossorigin="anonymous"></script>
+    
+    <!-- Preconnect to CDNs for faster loading -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <!-- Custom CSS with cache busting -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20250614">
+    
+    <!-- JSON-LD Structured Data for Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "INSTALLMOD.COM",
+        "url": "{{ url_for('index', _external=True) }}",
+        "logo": "{{ url_for('static', filename='images/logo.jpg', _external=True) }}",
+        "description": "Download the latest MOD APKs for Android. Premium apps, games, and tools with unlocked features. Safe, fast, and free downloads.",
+        "sameAs": [
+            "https://facebook.com/installmod",
+            "https://twitter.com/rakeshxofficial",
+            "https://instagram.com/installmod_com",
+            "https://t.me/installmod",
+            "https://youtube.com/@rakeshxofficiall",
+            "https://github.com/installmod"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "url": "{{ url_for('contact', _external=True) }}"
+        }
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data for Website -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "INSTALLMOD.COM",
+        "url": "{{ url_for('index', _external=True) }}",
+        "description": "Download the latest MOD APKs for Android. Premium apps, games, and tools with unlocked features.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "INSTALLMOD.COM"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ url_for('search', _external=True) }}?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <button class="hamburger-btn" type="button" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <div class="header-center">
+                <a href="{{ url_for('index') }}" class="brand-container">
+                    <div class="app-icon header-logo">
+                        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="installMOD Logo" style="width: 40px !important; height: 40px !important; max-width: 40px !important; max-height: 40px !important;">
+                    </div>
+                    <div class="brand-info">
+                        <div class="brand-name">installMOD</div>
+                        <div class="brand-tagline">Download & enjoy</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="header-right">
+                <button class="theme-toggle" type="button" title="Toggle theme" onclick="toggleDarkTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="{{ url_for('search') }}" class="search-toggle" title="Search">
+                    <i class="fas fa-search"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    {% if request.endpoint != 'index' %}
+    {% block breadcrumbs %}
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('index') }}">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                {% set breadcrumb_items = get_breadcrumbs() %}
+                {% for item in breadcrumb_items %}
+                    {% if loop.last %}
+                        <li class="breadcrumb-item active">
+                            <span class="breadcrumb-text">{{ item.name }}</span>
+                        </li>
+                    {% else %}
+                        {% if item.url and item.url != '#' %}
+                            <li class="breadcrumb-item">
+                                <a href="{{ item.url }}">
+                                    <span class="breadcrumb-text">{{ item.name }}</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="breadcrumb-item">
+                                <span class="breadcrumb-text">{{ item.name }}</span>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+    </nav>
+    {% endblock %}
+    {% endif %}
+
+
+
+    <!-- New Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" style="display: none;"></div>
+    <div class="new-sidebar" id="newSidebar">
+        <div class="sidebar-header">
+            <h5>Menu</h5>
+            <button type="button" class="sidebar-close" id="sidebarClose">×</button>
+        </div>
+        <div class="sidebar-content">
+            <a href="{{ url_for('index') }}" class="sidebar-item">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
+            </a>
+            <a href="{{ url_for('apps_list') }}" class="sidebar-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>APPS</span>
+            </a>
+            <a href="{{ url_for('games_list') }}" class="sidebar-item">
+                <i class="fas fa-gamepad"></i>
+                <span>GAMES</span>
+            </a>
+            <a href="{{ url_for('news_list') }}" class="sidebar-item">
+                <i class="fas fa-newspaper"></i>
+                <span>NEWS</span>
+            </a>
+            <a href="{{ url_for('search') }}" class="sidebar-item">
+                <i class="fas fa-search"></i>
+                <span>SEARCH</span>
+            </a>
+        </div>
+    </div>
+
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% if error %}
+            <div class="container mt-4">
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error!</h4>
+                    <p>{{ error }}</p>
+                </div>
+            </div>
+        {% else %}
+            {% block content %}{% endblock %}
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-section">
+                        <h6 class="footer-title">
+                            <i class="fas fa-paperclip"></i>
+                            Useful Sections
+                        </h6>
+                        <div class="footer-links">
+                            <a href="{{ url_for('index') }}">Home</a>
+                            <a href="{{ url_for('apps_list') }}">Apps</a>
+                            <a href="{{ url_for('games_list') }}">Games</a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h6 class="footer-title">
+                            <i class="fas fa-info-circle"></i>
+                            About Us
+                        </h6>
+                        <div class="footer-links">
+                            <a href="{{ url_for('about') }}">About US</a>
+                            <a href="{{ url_for('advertiser') }}">Advertiser</a>
+                            <a href="{{ url_for('contact') }}">Contact</a>
+                            <a href="{{ url_for('modding_required') }}">Modding Required</a>
+                            <a href="{{ url_for('report') }}">Report</a>
+                        </div>
+                    </div>
+                    
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/profile.php?id=61574864113828" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="Follow INSTALLMOD on Facebook">
+                            <i class="fab fa-facebook" aria-hidden="true"></i>
+                            <span class="sr-only">Facebook</span>
+                        </a>
+                        <a href="https://x.com/rakeshxofficial" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="Follow @rakeshxofficial on Twitter">
+                            <i class="fab fa-twitter" aria-hidden="true"></i>
+                            <span class="sr-only">Twitter</span>
+                        </a>
+                        <a href="https://www.instagram.com/installmod_com" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="Follow @installmod_com on Instagram">
+                            <i class="fab fa-instagram" aria-hidden="true"></i>
+                            <span class="sr-only">Instagram</span>
+                        </a>
+                        <a href="https://t.me/+ZMgrrdNk_IUwYzY9" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="Join INSTALLMOD Telegram channel">
+                            <i class="fab fa-telegram" aria-hidden="true"></i>
+                            <span class="sr-only">Telegram</span>
+                        </a>
+                        <a href="https://youtube.com/@rakeshxofficiall" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="Subscribe to INSTALLMOD on YouTube">
+                            <i class="fab fa-youtube" aria-hidden="true"></i>
+                            <span class="sr-only">YouTube</span>
+                        </a>
+                        <a href="https://github.com/installmod" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="View INSTALLMOD on GitHub">
+                            <i class="fab fa-github" aria-hidden="true"></i>
+                            <span class="sr-only">GitHub</span>
+                        </a>
+                    </div>
+                    
+                    <div class="copyright">
+                        © Copyright 2017-2025 INSTALLMOD.COM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optimized JavaScript loading -->
+    <script>
+        // Critical JavaScript inline for immediate execution
+        function toggleMobileMenu(){const menu=document.querySelector('.nav-menu');const hamburger=document.querySelector('.hamburger-btn');menu.classList.toggle('active');hamburger.classList.toggle('active')}
+        function toggleSection(sectionId){const content=document.getElementById(sectionId+'-content');const icon=document.getElementById(sectionId+'-icon');const header=document.querySelector(`[aria-controls="${sectionId}-content"]`);if(content&&icon&&header){const isVisible=content.style.display!=='none';if(isVisible){content.style.display='none';icon.classList.remove('fa-minus');icon.classList.add('fa-plus');header.setAttribute('aria-expanded','false');content.setAttribute('aria-hidden','true')}else{content.style.display='block';icon.classList.remove('fa-plus');icon.classList.add('fa-minus');header.setAttribute('aria-expanded','true');content.setAttribute('aria-hidden','false')}}}
+        function scrollToSection(sectionId){const element=document.getElementById(sectionId);if(element){element.scrollIntoView({behavior:'smooth'});element.focus()}}
+        
+        // Load non-critical JS asynchronously
+        const loadScript = (src) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            document.head.appendChild(script);
+        };
+        
+        // Load Bootstrap immediately since it's needed for functionality
+        loadScript('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js');
+        
+        // Load main.js for menu functionality
+        loadScript('{{ url_for("static", filename="js/main.js") }}');
+        
+        // Load theme management
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (themeIcon) {
+                themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        });
+        
+        function toggleDarkTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (themeIcon) {
+                themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+        
+        // Immediate hamburger menu functionality (inline for reliability)
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const sidebar = document.getElementById('newSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const sidebarClose = document.getElementById('sidebarClose');
+
+            if (hamburgerBtn && sidebar && sidebarOverlay) {
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Hamburger clicked'); // Debug log
+                    sidebar.classList.add('active');
+                    sidebarOverlay.classList.add('active');
+                    sidebarOverlay.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    console.log('Sidebar should be visible now'); // Debug log
+                });
+
+                function closeSidebar() {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    sidebarOverlay.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+
+                if (sidebarClose) {
+                    sidebarClose.addEventListener('click', closeSidebar);
+                }
+
+                sidebarOverlay.addEventListener('click', closeSidebar);
+
+                // Close sidebar on escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                        closeSidebar();
+                    }
+                });
+            }
+        });
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

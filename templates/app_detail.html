@@ -1,0 +1,799 @@
+{% extends "base.html" %}
+
+{% block title %}{{ app.meta_title if app.meta_title else app.name + ' v' + app.version + ' MOD APK (' + app.mod_info + ')' }}{% endblock %}
+
+{% block meta_description %}{{ app.meta_description if app.meta_description else (app.short_description[:120] if app.short_description else app.description[:120]) }}{% endblock %}
+
+{% block canonical %}{% if is_subdomain %}{{ request.url }}{% else %}https://{{ app.slug }}.{{ request.host.replace('www.', '') }}{% endif %}{% endblock %}
+
+{% block og_title %}{{ app.name }} v{{ app.version }} MOD APK - Free Download{% endblock %}
+
+{% block og_description %}{{ app.short_description }}{% endblock %}
+
+{% block og_image %}{{ app.featured_image }}{% endblock %}
+
+{% block twitter_title %}{{ app.name }} v{{ app.version }} MOD APK{% endblock %}
+
+{% block twitter_description %}{{ app.short_description }}{% endblock %}
+
+{% block twitter_image %}{{ app.featured_image }}{% endblock %}
+
+{% block keywords %}{{ app.name }}, MOD APK, {{ app.category }}, {{ app.genre }}, Android app, Premium features, {{ app.mod_info }}{% endblock %}
+
+{% block robots %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endblock %}
+
+{% block extra_head %}
+<!-- Enhanced Schema.org JSON-LD for App -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "{{ app.name }}",
+    "description": "{{ app.short_description | truncate(160) }}",
+    "url": "{{ url_for('content_detail', slug=app.slug, _external=True) }}",
+    "downloadUrl": "{{ app.download_link }}",
+    "applicationCategory": "{{ app.category }}",
+    "operatingSystem": "Android",
+    "version": "{{ app.version }}",
+    "fileSize": "{{ app.size }}",
+    "screenshot": {{ app.screenshots | from_json | tojson if app.screenshots else '[]' }},
+    "image": "{{ app.featured_image }}",
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ app.rating or 4.5 }},
+        "ratingCount": {{ app.votes or 100 }},
+        "bestRating": 5,
+        "worstRating": 1
+    },
+    "author": {
+        "@type": "Organization",
+        "name": "{{ app.publisher or 'INSTALLMOD.COM' }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "INSTALLMOD.COM",
+        "url": "{{ url_for('index', _external=True) }}",
+        "logo": "{{ url_for('static', filename='images/logo.jpg', _external=True) }}"
+    },
+    "datePublished": "{{ app.created_at.strftime('%Y-%m-%d') if app.created_at else '2025-06-18' }}",
+    "dateModified": "{{ app.updated_at.strftime('%Y-%m-%d') if app.updated_at else '2025-06-18' }}",
+    "installUrl": "{{ app.download_link }}",
+    "genre": "{{ app.genre }}",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+    }
+}
+</script>
+
+<!-- Breadcrumb JSON-LD -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ url_for('index', _external=True) }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Apps",
+            "item": "{{ url_for('apps_list', _external=True) }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ app.name }}",
+            "item": "{{ url_for('content_detail', slug=app.slug, _external=True) }}"
+        }
+    ]
+}
+</script>
+
+<!-- Article JSON-LD for content -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ app.name }} v{{ app.version }} MOD APK Download",
+    "description": "{{ app.description | truncate(160) }}",
+    "image": "{{ app.featured_image }}",
+    "author": {
+        "@type": "Organization",
+        "name": "INSTALLMOD.COM"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "INSTALLMOD.COM",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ url_for('static', filename='images/logo.jpg', _external=True) }}"
+        }
+    },
+    "datePublished": "{{ app.created_at.strftime('%Y-%m-%d') if app.created_at else '2025-06-18' }}",
+    "dateModified": "{{ app.updated_at.strftime('%Y-%m-%d') if app.updated_at else '2025-06-18' }}",
+    "mainEntityOfPage": "{{ url_for('content_detail', slug=app.slug, _external=True) }}"
+}
+</script>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/performance.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="app-detail-page">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-image-container">
+            <img src="{{ app.featured_image }}" alt="{{ app.name }}" class="hero-image">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <h1 class="app-title">{{ app.name }} v{{ app.version }} MOD APK ({{ app.mod_info }})</h1>
+                    <div class="last-updated">
+                        <i class="fas fa-clock"></i>
+                        {{ app.last_updated }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Short Description -->
+    <div class="short-description">
+        <p>{{ app.short_description }}</p>
+    </div>
+
+    <!-- App Information Table -->
+    <div class="app-info-table">
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fab fa-android"></i>
+                App Name
+            </div>
+            <div class="info-value">{{ app.name }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-tools"></i>
+                Publisher
+            </div>
+            <div class="info-value">
+                <a href="{{ url_for('publisher_detail', slug=app.publisher | publisher_to_slug) }}" class="publisher-link">{{ app.publisher }}</a>
+            </div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-align-left"></i>
+                Genre
+            </div>
+            <div class="info-value">
+                <a href="{{ url_for('genre_detail', slug=app.genre | genre_to_slug) }}" class="genre-link">{{ app.genre }}</a>
+            </div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-archive"></i>
+                Size
+            </div>
+            <div class="info-value">{{ app.size }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-bolt"></i>
+                Latest Version
+            </div>
+            <div class="info-value">{{ app.version }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-gamepad"></i>
+                MOD Info
+            </div>
+            <div class="info-value">{{ app.mod_info }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fab fa-google-play"></i>
+                Get it On
+            </div>
+            <div class="info-value">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="google-play-badge">
+            </div>
+        </div>
+    </div>
+
+    <!-- User Rating -->
+    <div class="user-rating">
+        <div class="stars">
+            {% for i in range(5) %}
+                {% if i < app.rating %}
+                    <i class="fas fa-star"></i>
+                {% else %}
+                    <i class="far fa-star"></i>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <span class="rating-text">{{ app.rating }}/5 ({{ app.votes }} votes)</span>
+    </div>
+
+    <!-- Social Share Buttons -->
+    <div class="social-share">
+        <a href="#" class="social-btn facebook" onclick="shareOn('facebook')">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="social-btn twitter" onclick="shareOn('twitter')">
+            <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="social-btn pinterest" onclick="shareOn('pinterest')">
+            <i class="fab fa-pinterest"></i>
+        </a>
+        <a href="#" class="social-btn linkedin" onclick="shareOn('linkedin')">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="#" class="social-btn email" onclick="shareOn('email')">
+            <i class="fas fa-envelope"></i>
+        </a>
+    </div>
+
+    <!-- Download Button -->
+    <div class="download-section">
+        {% if app.download_link %}
+        <a href="{{ app.download_link }}" class="download-btn" target="_blank" rel="noopener" aria-label="Download {{ app.name }} APK file, size {{ app.size }}">
+            <i class="fas fa-download" aria-hidden="true"></i>
+            Download ({{ app.size }})
+        </a>
+        {% else %}
+        <button class="download-btn" onclick="alert('Download link not available')" aria-label="Download {{ app.name }} APK file, size {{ app.size }} - currently unavailable">
+            <i class="fas fa-download" aria-hidden="true"></i>
+            Download ({{ app.size }})
+        </button>
+        {% endif %}
+    </div>
+
+    <!-- MOD Info Section -->
+    <div class="mod-info-section">
+        <div class="collapsible-header" onclick="toggleSection('mod-info')" role="button" tabindex="0" aria-expanded="false" aria-controls="mod-info-content" aria-label="Toggle MOD Info section">
+            <h2>MOD Info</h2>
+            <i class="fas fa-plus toggle-icon" id="mod-info-icon" aria-hidden="true"></i>
+        </div>
+        <div class="collapsible-content" id="mod-info-content">
+            <ul class="mod-features">
+                {% for feature in app.mod_features %}
+                <li><i class="fas fa-check"></i> {{ feature }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- What's New Section -->
+    {% if app.whats_new %}
+    <div class="whats-new-section">
+        <h2>What's new</h2>
+        <div class="whats-new-content">
+            <div class="update-highlight">
+                <i class="fas fa-fire"></i>
+                {{ app.whats_new.title }}
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="update-details">
+                {{ app.whats_new.content | safe }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Explore This Article -->
+    {% if app.article_sections %}
+    <div class="explore-section">
+        <div class="collapsible-header" onclick="toggleSection('explore')" role="button" tabindex="0" aria-expanded="false" aria-controls="explore-content" aria-label="Toggle Explore this article section">
+            <h2>Explore this article</h2>
+            <i class="fas fa-plus toggle-icon" id="explore-icon" aria-hidden="true"></i>
+        </div>
+        <div class="collapsible-content" id="explore-content">
+            <div class="article-navigation">
+                {% for heading in app.article_sections | extract_headings %}
+                <button class="nav-button" onclick="scrollToSection('{{ heading.slug }}')" aria-label="Navigate to {{ heading.title }} section">
+                    {{ heading.title }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Article Content -->
+    <div class="full-article-section">
+        <h2>Full Article Content</h2>
+        <div class="article-content markdown-content">
+            {{ app.article_sections | markdown | safe }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Download Section (Repeated) -->
+    <!-- Download Instructions -->
+    <div class="download-instructions">
+        <div class="download-note">
+            <p>You are now ready to download <strong>{{ app.name }}</strong> for free. Here are some notes:</p>
+            <ul>
+                <li>To prevent users from installing apk files from outside, Google Play has now added a warning when installing apks & mods. PlayProtect will tell you the file is harmful. Simply, just click "Install anyway (unsafe)".</li>
+            </ul>
+        </div>
+        
+        <!-- Telegram Join Button -->
+        <div class="telegram-section">
+            <a href="https://t.me/+ZMgrrdNk_IUwYzY9" class="telegram-btn" target="_blank" rel="noopener" aria-label="Join installMOD.COM on Telegram channel for updates">
+                <i class="fab fa-telegram" aria-hidden="true"></i>
+                Join @installMOD.COM on Telegram channel
+            </a>
+        </div>
+    </div>
+
+    <!-- More from Developer -->
+    {% if related_apps %}
+    <div class="more-from-developer">
+        <h2>More from Developer</h2>
+        <div class="app-cards">
+            {% for related_app in related_apps %}
+            <a href="{{ url_for('content_detail', slug=related_app.slug) }}" class="app-card-link" aria-label="View {{ related_app.name }} details">
+                <div class="app-card">
+                    <img src="{{ related_app.icon }}" alt="{{ related_app.name }} app icon" class="app-icon" loading="lazy" decoding="async">
+                    <div class="app-info">
+                        <h3>{{ related_app.name }}</h3>
+                        <div class="app-meta">
+                            <i class="fas fa-hdd" aria-hidden="true"></i> {{ related_app.version }} + {{ related_app.size }}
+                        </div>
+                        <div class="mod-badge">
+                            <i class="fas fa-wrench" aria-hidden="true"></i> {{ related_app.mod_info }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recommended for You -->
+    {% if recommended_apps %}
+    <div class="recommended-section">
+        <h3>Recommended for You</h3>
+        <div class="app-cards">
+            {% for rec_app in recommended_apps %}
+            <a href="{{ url_for('content_detail', slug=rec_app.slug) }}" class="app-card-link">
+                <div class="app-card">
+                    <img src="{{ rec_app.icon }}" alt="{{ rec_app.name }}" class="app-icon">
+                    <div class="app-info">
+                        <h4>{{ rec_app.name }}</h4>
+                        <div class="app-meta">
+                            <i class="fas fa-hdd"></i> {{ rec_app.version }} + {{ rec_app.size }}
+                        </div>
+                        <div class="mod-badge">
+                            <i class="fas fa-wrench"></i> {{ rec_app.mod_info }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+        <h3>Comments</h3>
+        
+        <!-- Comments List -->
+        <div id="comments-container" class="comments-list">
+            <!-- Comments will be loaded here dynamically -->
+        </div>
+
+        <!-- Comment Form -->
+        <div class="comment-form">
+            <h4>Leave a Comment</h4>
+            <form id="commentForm">
+                <div class="form-group">
+                    <textarea id="commentText" placeholder="Write your comment here..." required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="commentName" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="commentEmail" placeholder="Your Email (optional)">
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Post Comment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Latest/Popular -->
+    <div class="category-sections">
+        <div class="category-section">
+            <h3>{{ app.genre }} - Latest</h3>
+            <div class="app-cards">
+                {% for latest_app in latest_apps %}
+                <div class="app-card">
+                    <img src="{{ latest_app.icon }}" alt="{{ latest_app.name }}" class="app-icon">
+                    <div class="app-info">
+                        <h4>{{ latest_app.name }}</h4>
+                        <div class="app-meta">
+                            <i class="fas fa-hdd"></i> {{ latest_app.version }} + {{ latest_app.size }}
+                        </div>
+                        <div class="mod-badge">
+                            <i class="fas fa-wrench"></i> {{ latest_app.mod_info }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h3>{{ app.genre }} - Popular</h3>
+            <div class="app-cards">
+                {% for popular_app in popular_apps %}
+                <div class="app-card">
+                    <img src="{{ popular_app.icon }}" alt="{{ popular_app.name }}" class="app-icon">
+                    <div class="app-info">
+                        <h4>{{ popular_app.name }}</h4>
+                        <div class="app-meta">
+                            <i class="fas fa-hdd"></i> {{ popular_app.version }} + {{ popular_app.size }}
+                        </div>
+                        <div class="mod-badge">
+                            <i class="fas fa-wrench"></i> {{ popular_app.mod_info }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+// Collapsible sections
+function toggleSection(sectionId) {
+    const content = document.getElementById(sectionId + '-content');
+    const icon = document.getElementById(sectionId + '-icon');
+    
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        icon.classList.remove('fa-plus');
+        icon.classList.add('fa-minus');
+    } else {
+        content.style.display = 'none';
+        icon.classList.remove('fa-minus');
+        icon.classList.add('fa-plus');
+    }
+}
+
+// Smooth scroll to sections
+function scrollToSection(sectionId) {
+    if (sectionId && sectionId !== '') {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+}
+
+// Social sharing
+function shareOn(platform) {
+    const url = window.location.href;
+    const title = document.title;
+    
+    let shareUrl = '';
+    switch(platform) {
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+            break;
+        case 'pinterest':
+            shareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(title)}`;
+            break;
+        case 'linkedin':
+            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`;
+            break;
+    }
+    
+    if (platform === 'email') {
+        window.location.href = shareUrl;
+    } else {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+}
+
+// Download functionality
+function downloadApp() {
+    showNotification('Download started! Please wait...', 'success');
+    // Add actual download logic here
+}
+
+// Comment System
+const appSlug = '{{ app.slug }}';
+
+// Load comments on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadComments();
+});
+
+// Load all comments
+async function loadComments() {
+    try {
+        const response = await fetch(`/api/comments/${appSlug}`);
+        const comments = await response.json();
+        renderComments(comments);
+    } catch (error) {
+        console.error('Error loading comments:', error);
+    }
+}
+
+// Render comments
+function renderComments(comments) {
+    const container = document.getElementById('comments-container');
+    container.innerHTML = '';
+    
+    if (comments.length === 0) {
+        container.innerHTML = '<p class="no-comments">No comments yet. Be the first to comment!</p>';
+        return;
+    }
+    
+    comments.forEach(comment => {
+        const commentElement = createCommentElement(comment);
+        container.appendChild(commentElement);
+    });
+}
+
+// Create comment element
+function createCommentElement(comment) {
+    const commentDiv = document.createElement('div');
+    commentDiv.className = 'comment';
+    commentDiv.innerHTML = `
+        <div class="comment-avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="comment-content">
+            <div class="comment-header">
+                <span class="comment-author">${escapeHtml(comment.name)}</span>
+                <span class="comment-date">${comment.date}</span>
+            </div>
+            <div class="comment-text">${escapeHtml(comment.text)}</div>
+            <button class="reply-btn" onclick="toggleReplyForm(${comment.id})">
+                <i class="fas fa-reply"></i> Reply
+            </button>
+            <div id="reply-form-${comment.id}" class="reply-form" style="display: none;">
+                <form onsubmit="submitReply(event, ${comment.id})">
+                    <textarea placeholder="Write your reply..." required></textarea>
+                    <div class="reply-inputs">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email (optional)">
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i> Reply
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="replies">
+                ${comment.replies.map(reply => `
+                    <div class="reply">
+                        <div class="reply-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="reply-content">
+                            <div class="reply-header">
+                                <span class="reply-author">${escapeHtml(reply.name)}</span>
+                                <span class="reply-date">${reply.date}</span>
+                            </div>
+                            <div class="reply-text">${escapeHtml(reply.text)}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    return commentDiv;
+}
+
+// Toggle reply form
+function toggleReplyForm(commentId) {
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    const isVisible = replyForm.style.display !== 'none';
+    
+    // Hide all other reply forms
+    document.querySelectorAll('.reply-form').forEach(form => {
+        form.style.display = 'none';
+    });
+    
+    // Toggle current form
+    replyForm.style.display = isVisible ? 'none' : 'block';
+    
+    if (!isVisible) {
+        replyForm.querySelector('textarea').focus();
+    }
+}
+
+// Submit new comment
+document.getElementById('commentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const text = document.getElementById('commentText').value.trim();
+    const name = document.getElementById('commentName').value.trim();
+    const email = document.getElementById('commentEmail').value.trim();
+    
+    if (!text || !name) {
+        showNotification('Please fill in all required fields', 'error');
+        return;
+    }
+    
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                app_slug: appSlug,
+                name: name,
+                email: email,
+                text: text
+            })
+        });
+        
+        if (response.ok) {
+            showNotification('Comment posted successfully!', 'success');
+            this.reset();
+            loadComments(); // Reload comments
+        } else {
+            const error = await response.json();
+            showNotification(error.error || 'Failed to post comment', 'error');
+        }
+    } catch (error) {
+        console.error('Error posting comment:', error);
+        showNotification('Failed to post comment. Please try again.', 'error');
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+// Submit reply
+async function submitReply(event, commentId) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const text = form.querySelector('textarea').value.trim();
+    const name = form.querySelector('input[type="text"]').value.trim();
+    const email = form.querySelector('input[type="email"]').value.trim();
+    
+    if (!text || !name) {
+        showNotification('Please fill in all required fields', 'error');
+        return;
+    }
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/replies', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                comment_id: commentId,
+                name: name,
+                email: email,
+                text: text
+            })
+        });
+        
+        if (response.ok) {
+            showNotification('Reply posted successfully!', 'success');
+            form.reset();
+            document.getElementById(`reply-form-${commentId}`).style.display = 'none';
+            loadComments(); // Reload comments to show new reply
+        } else {
+            const error = await response.json();
+            showNotification(error.error || 'Failed to post reply', 'error');
+        }
+    } catch (error) {
+        console.error('Error posting reply:', error);
+        showNotification('Failed to post reply. Please try again.', 'error');
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Toggle collapsible sections
+function toggleSection(sectionId) {
+    const content = document.getElementById(sectionId + '-content');
+    const icon = document.getElementById(sectionId + '-icon');
+    
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        icon.classList.remove('fa-plus');
+        icon.classList.add('fa-minus');
+    } else {
+        content.style.display = 'none';
+        icon.classList.remove('fa-minus');
+        icon.classList.add('fa-plus');
+    }
+}
+
+// Smooth scroll to article sections
+function scrollToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    } else {
+        // If exact ID not found, try to find by heading text
+        const headings = document.querySelectorAll('.markdown-content h1, .markdown-content h2, .markdown-content h3');
+        for (let heading of headings) {
+            const headingText = heading.textContent.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            if (headingText.includes(sectionId.replace(/-/g, '').toLowerCase())) {
+                heading.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                break;
+            }
+        }
+    }
+}
+
+// Initialize collapsible sections as closed
+document.addEventListener('DOMContentLoaded', function() {
+    const modInfoContent = document.getElementById('mod-info-content');
+    const exploreContent = document.getElementById('explore-content');
+    
+    if (modInfoContent) modInfoContent.style.display = 'none';
+    if (exploreContent) exploreContent.style.display = 'none';
+});
+</script>
+{% endblock %}

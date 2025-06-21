@@ -1,0 +1,399 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ action }} App{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-mobile-alt me-2"></i>{{ action }} App</h1>
+    <a href="{{ url_for('admin.apps_list') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Apps
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">App Information</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">App Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ app.name if app else '' }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">URL Slug *</label>
+                        <input type="text" class="form-control" id="slug" name="slug" value="{{ app.slug if app else '' }}" required>
+                        <div class="form-text">Used in the URL (e.g., my-app-name)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="version" class="form-label">Version *</label>
+                        <input type="text" class="form-control" id="version" name="version" value="{{ app.version if app else '' }}" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="size" class="form-label">Size *</label>
+                        <input type="text" class="form-control" id="size" name="size" value="{{ app.size if app else '' }}" required>
+                        <div class="form-text">e.g., 25.4 MB</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="download_count" class="form-label">Download Count</label>
+                        <input type="text" class="form-control" id="download_count" name="download_count" value="{{ app.download_count if app else '' }}">
+                        <div class="form-text">e.g., 1M+ or 500K</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <input type="text" class="form-control" id="category" name="category" value="{{ app.category if app else '' }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="featured" class="form-label">Featured Type</label>
+                        <select class="form-select" id="featured" name="featured">
+                            <option value="">Not Featured</option>
+                            <option value="indispensable" {{ 'selected' if app and app.featured == 'indispensable' else '' }}>Indispensable</option>
+                            <option value="premium" {{ 'selected' if app and app.featured == 'premium' else '' }}>Premium</option>
+                            <option value="editors_choice" {{ 'selected' if app and app.featured == 'editors_choice' else '' }}>Editor's Choice</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="publisher" class="form-label">Publisher</label>
+                        <input type="text" class="form-control" id="publisher" name="publisher" value="{{ app.publisher if app else '' }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="genre" class="form-label">Genre</label>
+                        <input type="text" class="form-control" id="genre" name="genre" value="{{ app.genre if app else '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="number" class="form-control" id="rating" name="rating" min="0" max="5" step="0.1" value="{{ app.rating if app else '' }}">
+                        <div class="form-text">0.0 to 5.0</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="votes" class="form-label">Vote Count</label>
+                        <input type="number" class="form-control" id="votes" name="votes" value="{{ app.votes if app else '' }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="last_updated" class="form-label">Last Updated</label>
+                        <input type="text" class="form-control" id="last_updated" name="last_updated" value="{{ app.last_updated if app else '' }}">
+                        <div class="form-text">e.g., March 15, 2024</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="icon" class="form-label">Icon URL</label>
+                <input type="url" class="form-control" id="icon" name="icon" value="{{ app.icon if app else '' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="featured_image" class="form-label">Featured Image URL</label>
+                <input type="url" class="form-control" id="featured_image" name="featured_image" value="{{ app.featured_image if app else '' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="download_link" class="form-label">Download Link *</label>
+                <input type="url" class="form-control" id="download_link" name="download_link" value="{{ app.download_link if app else '' }}" required>
+                <div class="form-text">Direct download URL for the APK file</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="short_description" class="form-label">Short Description</label>
+                <textarea class="form-control" id="short_description" name="short_description" rows="2">{{ app.short_description if app else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Full Description</label>
+                <textarea class="form-control" id="description" name="description" rows="6">{{ app.description if app else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="mod_info" class="form-label">MOD Info</label>
+                <input type="text" class="form-control" id="mod_info" name="mod_info" value="{{ app.mod_info if app else '' }}">
+                <div class="form-text">e.g., Premium Unlocked, Ad-Free</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="features" class="form-label">Features</label>
+                <textarea class="form-control" id="features" name="features" rows="4" placeholder="Enter each feature on a new line">{% if app and app.features %}{{ (app.features | from_json) | join('\n') if app.features != '[]' else '' }}{% endif %}</textarea>
+                <div class="form-text">Enter each feature on a separate line</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="mod_features" class="form-label">MOD Features</label>
+                <textarea class="form-control" id="mod_features" name="mod_features" rows="3" placeholder="Enter each MOD feature on a new line">{% if app and app.mod_features %}{{ (app.mod_features | from_json) | join('\n') if app.mod_features != '[]' else '' }}{% endif %}</textarea>
+                <div class="form-text">Enter each MOD feature on a separate line</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="screenshots" class="form-label">Screenshots URLs</label>
+                <textarea class="form-control" id="screenshots" name="screenshots" rows="3" placeholder="Enter each screenshot URL on a new line">{% if app and app.screenshots %}{{ (app.screenshots | from_json) | join('\n') if app.screenshots != '[]' else '' }}{% endif %}</textarea>
+                <div class="form-text">Enter each screenshot URL on a separate line</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="whats_new_title" class="form-label">What's New Title</label>
+                <input type="text" class="form-control" id="whats_new_title" name="whats_new_title" value="{{ app.whats_new_title if app else '' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="whats_new_content" class="form-label">What's New Content</label>
+                <textarea class="form-control" id="whats_new_content" name="whats_new_content" rows="4">{{ app.whats_new_content if app else '' }}</textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="article_content" class="form-label">Article Content (Markdown)</label>
+                <textarea class="form-control" id="article_content" name="article_content" rows="15" placeholder="## Massive Music Library
+
+Access to millions of songs from every genre and era. The extensive library includes:
+
+- **Latest Hits**: All the newest releases from top artists
+- **Classic Collection**: Timeless songs from past decades  
+- **International Music**: Songs in multiple languages
+- **Indie Artists**: Support for emerging and independent musicians
+
+## Personalized Recommendations
+
+Smart AI-powered recommendations based on your listening habits:
+
+- **Daily Mix**: Curated playlists updated daily
+- **Discover Weekly**: New music tailored to your taste
+- **Mood-Based**: Playlists for every mood and activity
+- **Similar Artists**: Find new music similar to your favorites
+
+## Share and Collaborate Playlists
+
+Create and share playlists with friends and family:
+
+- **Public Playlists**: Share your music taste with the world
+- **Collaborative Playlists**: Let friends add their favorite songs
+- **Social Features**: Follow friends and see what they're listening to
+- **Playlist Comments**: Discuss songs with other listeners
+
+## Download Features
+
+Download music for offline listening:
+
+- **High Quality**: Download in multiple quality formats
+- **Unlimited Downloads**: No restrictions on download count
+- **Offline Mode**: Listen without internet connection
+- **Smart Downloads**: Automatically download recommended songs">{% if app and app.article_sections %}{{ app.article_sections }}{% endif %}</textarea>
+                <div class="form-text">
+                    <strong>Article Structure Guidelines:</strong><br>
+                    • Use ## for main section headings (these will appear as navigation buttons)<br>
+                    • Use ### for sub-sections within each main section<br>
+                    • Include bullet points with **bold** features<br>
+                    • Write engaging descriptions for each feature<br>
+                    • The navigation will automatically extract ## headings as clickable buttons
+                </div>
+            </div>
+
+            <!-- Advanced Settings Section -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <a href="#advancedSettings" class="btn btn-link advanced-settings-toggle text-decoration-none w-100 text-start" data-bs-toggle="collapse" aria-expanded="true" aria-controls="advancedSettings">
+                            <i class="fas fa-cog me-2"></i> Advanced Settings
+                        </a>
+                    </h5>
+                </div>
+                <div id="advancedSettings" class="collapse show">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="meta_title" class="form-label">
+                                        <i class="fas fa-heading me-1"></i> Meta Title
+                                        <small class="text-muted">(Leave empty to auto-generate)</small>
+                                    </label>
+                                    <input type="text" class="form-control" id="meta_title" name="meta_title" 
+                                           value="{{ app.meta_title or '' if app else '' }}" 
+                                           maxlength="300" placeholder="Custom meta title for SEO">
+                                    <small class="form-text text-muted">Recommended length: 50-60 characters</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="meta_description" class="form-label">
+                                        <i class="fas fa-align-left me-1"></i> Meta Description
+                                        <small class="text-muted">(Leave empty to auto-generate)</small>
+                                    </label>
+                                    <textarea class="form-control" id="meta_description" name="meta_description" 
+                                              rows="3" maxlength="500" placeholder="Custom meta description for SEO">{{ app.meta_description or '' if app else '' }}</textarea>
+                                    <small class="form-text text-muted">Recommended length: 150-160 characters</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('admin.apps_list') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>{{ action }} App
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Article Content Preview -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h6 class="mb-0"><i class="fas fa-eye me-2"></i>Article Content Preview</h6>
+    </div>
+    <div class="card-body">
+        <div id="articlePreview" class="border rounded p-3" style="min-height: 200px; background-color: #f8f9fa;">
+            <em class="text-muted">Type in the article content area above to see preview...</em>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+// Auto-generate slug from name
+document.getElementById('name').addEventListener('input', function() {
+    const name = this.value;
+    const slug = name.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+    
+    if (!document.getElementById('slug').value || document.getElementById('slug').dataset.autoGenerated) {
+        document.getElementById('slug').value = slug;
+        document.getElementById('slug').dataset.autoGenerated = 'true';
+    }
+});
+
+document.getElementById('slug').addEventListener('input', function() {
+    this.dataset.autoGenerated = 'false';
+});
+
+// Live preview of article content markdown
+let articlePreviewTimeout;
+document.getElementById('article_content').addEventListener('input', function() {
+    clearTimeout(articlePreviewTimeout);
+    articlePreviewTimeout = setTimeout(() => {
+        const content = this.value;
+        const preview = document.getElementById('articlePreview');
+        
+        if (content.trim()) {
+            try {
+                preview.innerHTML = marked.parse(content);
+            } catch (e) {
+                preview.innerHTML = '<div class="text-danger">Markdown parsing error: ' + e.message + '</div>';
+            }
+        } else {
+            preview.innerHTML = '<em class="text-muted">Type in the article content area above to see preview...</em>';
+        }
+    }, 500);
+});
+</script>
+
+<!-- Advanced Settings Section -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <button class="btn btn-link advanced-settings-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSettings" aria-expanded="false" aria-controls="advancedSettings">
+                <i class="fas fa-cog"></i> Advanced Settings
+            </button>
+        </h5>
+    </div>
+    <div id="advancedSettings" class="collapse">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="meta_title">
+                            <i class="fas fa-heading"></i> Meta Title
+                            <small class="text-muted">(Leave empty to auto-generate)</small>
+                        </label>
+                        <input type="text" class="form-control" id="meta_title" name="meta_title" 
+                               value="{{ app.meta_title if app and app.meta_title else '' }}" 
+                               maxlength="300" placeholder="Custom meta title for SEO">
+                        <small class="form-text text-muted">Recommended length: 50-60 characters</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="meta_description">
+                            <i class="fas fa-align-left"></i> Meta Description
+                            <small class="text-muted">(Leave empty to auto-generate)</small>
+                        </label>
+                        <textarea class="form-control" id="meta_description" name="meta_description" 
+                                  rows="3" maxlength="500" placeholder="Custom meta description for SEO">{{ app.meta_description if app and app.meta_description else '' }}</textarea>
+                        <small class="form-text text-muted">Recommended length: 150-160 characters</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.advanced-settings-toggle {
+    text-decoration: none;
+    color: #495057;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.advanced-settings-toggle:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.advanced-settings-toggle:focus {
+    box-shadow: none;
+    text-decoration: none;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Latest News - JARMOD.COM{% endblock %}
+
+{% block meta_description %}Stay updated with the latest news about Android apps, games, and MOD APKs. Get insights, tutorials, and industry updates.{% endblock %}
+
+{% block canonical %}{{ url_for('news_list', _external=True) }}{% endblock %}
+
+{% block extra_head %}
+<!-- Schema.org JSON-LD for News Listing -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Latest News - JARMOD.COM",
+  "description": "Latest news and updates about Android apps, games, and MOD APKs",
+  "url": "{{ url_for('news_list', _external=True) }}",
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "News Articles",
+    "numberOfItems": "{{ news|length }}",
+    "itemListElement": [
+      {% for article in news[:20] %}
+      {
+        "@type": "NewsArticle",
+        "headline": "{{ article.title }}",
+        "url": "{{ url_for('content_detail', slug=article.slug, _external=True) }}",
+        "datePublished": "{{ article.date }}",
+        "dateModified": "{{ article.date }}",
+        "author": {
+          "@type": "Organization",
+          "name": "{{ article.author or 'JARMOD.COM' }}"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "JARMOD.COM",
+          "url": "{{ url_for('index', _external=True) }}"
+        },
+        "description": "{{ article.excerpt }}",
+        "articleSection": "{{ article.category }}",
+        "keywords": "{{ article.tags | join(', ') if article.tags else 'MOD APK, Android, Mobile Apps' }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ url_for('index', _external=True) }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "News",
+        "item": "{{ url_for('news_list', _external=True) }}"
+      }
+    ]
+  }
+}
+</script>
+
+<!-- Open Graph Tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Latest News - JARMOD.COM">
+<meta property="og:description" content="Stay updated with the latest news about Android apps, games, and MOD APKs">
+<meta property="og:url" content="{{ url_for('news_list', _external=True) }}">
+<meta property="og:site_name" content="JARMOD.COM">
+
+<!-- Additional SEO Meta Tags -->
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="Android news, MOD APK news, mobile apps updates, gaming news">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Latest News</h1>
+        <p class="text-muted">Stay updated with the latest news and updates</p>
+    </div>
+
+    <div class="news-grid">
+        {% for article in news %}
+        <article class="news-item">
+            {% if article.featured_image %}
+            <div class="news-image">
+                <a href="/{{ article.slug }}">
+                    <img src="{{ article.featured_image }}" alt="{{ article.title }}">
+                </a>
+            </div>
+            {% endif %}
+            <div class="news-content">
+                <h3>
+                    <a href="/{{ article.slug }}">{{ article.title }}</a>
+                </h3>
+                <p class="news-excerpt">{{ article.excerpt }}</p>
+                <div class="news-meta">
+                    <span class="text-muted">
+                        <i class="fas fa-user me-1"></i>{{ article.author }}
+                    </span>
+                    <span class="text-muted ms-3">
+                        <i class="fas fa-calendar me-1"></i>{{ article.date }}
+                    </span>
+                    <span class="badge bg-primary ms-3">{{ article.category|title }}</span>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if not news %}
+    <div class="empty-state">
+        <div class="text-center">
+            <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+            <h3>No News Available</h3>
+            <p class="text-muted">Check back later for the latest updates and news.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

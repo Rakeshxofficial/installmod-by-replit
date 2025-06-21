@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- News Section -->
+    <section class="news-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>News</h2>
+                <a href="{{ url_for('news_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for article in news %}
+            <div class="news-card">
+                <div class="news-image">
+                    <img src="{{ article.image }}" alt="{{ article.title }}">
+                </div>
+                <div class="news-content">
+                    <h3><a href="/{{ article.slug }}">{{ article.title }}</a></h3>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Indispensable Apps Section -->
+    <section class="indispensable-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title-red">INDISPENSABLE ON YOUR PHONE</h2>
+                <a href="{{ url_for('apps_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for app in indispensable_apps %}
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="{{ app.icon }}" alt="{{ app.name }}">
+                </div>
+                <div class="app-info">
+                    <h4><a href="{{ /app.slug }}">{{ app.name }}</a></h4>
+                    <div class="app-details">
+                        <i class="fas fa-download text-danger"></i>
+                        <span>{{ app.version }} + {{ app.size }}</span>
+                    </div>
+                    <div class="app-features">
+                        <i class="fas fa-times text-danger"></i>
+                        <span>{{ app.features|join(', ') }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Editor's Choice Section -->
+    <section class="editors-choice-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Editor's Choice</h2>
+                <a href="#" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for item in editors_choice %}
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="{{ item.icon }}" alt="{{ item.name }}">
+                </div>
+                <div class="app-info">
+                    <h4>
+                        <a href="/{{ item.slug }}">{{ item.name }}</a>
+                    </h4>
+                    <div class="app-details">
+                        <i class="fas fa-download text-danger"></i>
+                        <span>{{ item.version }} + {{ item.size }}</span>
+                    </div>
+                    <div class="app-features">
+                        <i class="fas fa-times text-danger"></i>
+                        <span>{{ item.features|join(', ') }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Games Latest Section -->
+    <section class="games-latest-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Games - Latest</h2>
+                <a href="{{ url_for('games_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for game in latest_games %}
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="{{ game.icon }}" alt="{{ game.name }}">
+                </div>
+                <div class="app-info">
+                    <h4><a href="/{{ game.slug }}">{{ game.name }}</a></h4>
+                    <div class="app-details">
+                        <i class="fas fa-download text-danger"></i>
+                        <span>{{ game.version }} + {{ game.size }}</span>
+                    </div>
+                    <div class="app-features">
+                        <i class="fas fa-times text-danger"></i>
+                        <span>{{ game.features|join(', ') }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Premium Latest Section -->
+    <section class="premium-latest-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Premium - Latest</h2>
+                <a href="{{ url_for('apps_list', category='premium') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            {% for app in premium_apps %}
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="{{ app.icon }}" alt="{{ app.name }}">
+                </div>
+                <div class="app-info">
+                    <h4><a href="{{ /app.slug }}">{{ app.name }}</a></h4>
+                    <div class="app-details">
+                        <i class="fas fa-download text-danger"></i>
+                        <span>{{ app.version }} + {{ app.size }}</span>
+                    </div>
+                    <div class="app-features">
+                        <i class="fas fa-times text-danger"></i>
+                        <span>{{ app.features|join(', ') }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Games Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Games - Categories</h2>
+                <a href="{{ url_for('games_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            <div class="categories-grid">
+                <a href="{{ url_for('games_list', category='action') }}" class="category-btn">Action</a>
+                <a href="{{ url_for('games_list', category='adventure') }}" class="category-btn">Adventure</a>
+                <a href="{{ url_for('games_list', category='arcade') }}" class="category-btn">Arcade</a>
+                <a href="{{ url_for('games_list', category='board') }}" class="category-btn">Board</a>
+                <a href="{{ url_for('games_list', category='card') }}" class="category-btn">Card</a>
+                <a href="{{ url_for('games_list', category='casino') }}" class="category-btn">Casino</a>
+                <a href="{{ url_for('games_list', category='casual') }}" class="category-btn">Casual</a>
+                <a href="{{ url_for('games_list', category='educational') }}" class="category-btn">Educational</a>
+                <a href="{{ url_for('games_list', category='music') }}" class="category-btn">Music</a>
+                <a href="{{ url_for('games_list', category='nsfw') }}" class="category-btn">NSFW</a>
+                <a href="{{ url_for('games_list', category='puzzle') }}" class="category-btn">Puzzle</a>
+                <a href="{{ url_for('games_list', category='racing') }}" class="category-btn">Racing</a>
+                <a href="{{ url_for('games_list', category='role-playing') }}" class="category-btn">Role Playing</a>
+                <a href="{{ url_for('games_list', category='simulation') }}" class="category-btn">Simulation</a>
+                <a href="{{ url_for('games_list', category='sports') }}" class="category-btn">Sports</a>
+                <a href="{{ url_for('games_list', category='strategy') }}" class="category-btn">Strategy</a>
+                <a href="{{ url_for('games_list', category='trivia') }}" class="category-btn">Trivia</a>
+                <a href="{{ url_for('games_list', category='word') }}" class="category-btn">Word</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apps Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Apps - Categories</h2>
+                <a href="{{ url_for('apps_list') }}" class="btn btn-success btn-sm">View all</a>
+            </div>
+            
+            <div class="categories-grid">
+                <a href="{{ url_for('apps_list', category='art-design') }}" class="category-btn">Art & Design</a>
+                <a href="{{ url_for('apps_list', category='auto-vehicles') }}" class="category-btn">Auto & Vehic...</a>
+                <a href="{{ url_for('apps_list', category='books-reference') }}" class="category-btn">Books & Ref...</a>
+                <a href="{{ url_for('apps_list', category='business') }}" class="category-btn">Business</a>
+                <a href="{{ url_for('apps_list', category='comics') }}" class="category-btn">Comics</a>
+                <a href="{{ url_for('apps_list', category='communication') }}" class="category-btn">Communicat...</a>
+                <a href="{{ url_for('apps_list', category='dating') }}" class="category-btn">Dating</a>
+                <a href="{{ url_for('apps_list', category='education') }}" class="category-btn">Education</a>
+                <a href="{{ url_for('apps_list', category='emulator') }}" class="category-btn">Emulator</a>
+                <a href="{{ url_for('apps_list', category='entertainment') }}" class="category-btn">Entertainment</a>
+                <a href="{{ url_for('apps_list', category='finance') }}" class="category-btn">Finance</a>
+                <a href="{{ url_for('apps_list', category='food-drink') }}" class="category-btn">Food & Drink</a>
+                <a href="{{ url_for('apps_list', category='health-fitness') }}" class="category-btn">Health & Fitn...</a>
+                <a href="{{ url_for('apps_list', category='lifestyle') }}" class="category-btn">Lifestyle</a>
+                <a href="{{ url_for('apps_list', category='maps-navigation') }}" class="category-btn">Maps & Navi...</a>
+                <a href="{{ url_for('apps_list', category='medical') }}" class="category-btn">Medical</a>
+                <a href="{{ url_for('apps_list', category='music') }}" class="category-btn">Music</a>
+                <a href="{{ url_for('apps_list', category='music-audio') }}" class="category-btn">Music & Audio</a>
+                <a href="{{ url_for('apps_list', category='news-magazines') }}" class="category-btn">News & Mag...</a>
+                <a href="{{ url_for('apps_list', category='personalization') }}" class="category-btn">Personalizat...</a>
+                <a href="{{ url_for('apps_list', category='photography') }}" class="category-btn">Photography</a>
+                <a href="{{ url_for('apps_list', category='productivity') }}" class="category-btn">Productivity</a>
+                <a href="{{ url_for('apps_list', category='shopping') }}" class="category-btn">Shopping</a>
+                <a href="{{ url_for('apps_list', category='social') }}" class="category-btn">Social</a>
+                <a href="{{ url_for('apps_list', category='sport') }}" class="category-btn">Sport</a>
+                <a href="{{ url_for('apps_list', category='tools') }}" class="category-btn">Tools</a>
+                <a href="{{ url_for('apps_list', category='travel-local') }}" class="category-btn">Travel & Local</a>
+                <a href="{{ url_for('apps_list', category='video-players') }}" class="category-btn">Video Player...</a>
+                <a href="{{ url_for('apps_list', category='weather') }}" class="category-btn">Weather</a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

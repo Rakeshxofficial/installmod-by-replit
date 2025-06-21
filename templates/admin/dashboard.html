@@ -1,0 +1,294 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
+    <div class="text-muted">
+        Welcome to installMOD Admin Panel
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">{{ apps_count }}</div>
+                    <div>Total Apps</div>
+                </div>
+                <i class="fas fa-mobile-alt fa-3x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">{{ games_count }}</div>
+                    <div>Total Games</div>
+                </div>
+                <i class="fas fa-gamepad fa-3x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">{{ news_count }}</div>
+                    <div>News Articles</div>
+                </div>
+                <i class="fas fa-newspaper fa-3x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number" id="comments-count">0</div>
+                    <div>Total Comments</div>
+                </div>
+                <i class="fas fa-comments fa-3x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Secondary Statistics Row -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stats-card secondary">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number" id="pending-comments">0</div>
+                    <div>Pending Comments</div>
+                </div>
+                <i class="fas fa-clock fa-2x text-warning"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stats-card secondary">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number" id="total-content">{{ (apps_count + games_count + news_count) }}</div>
+                    <div>Total Content</div>
+                </div>
+                <i class="fas fa-chart-bar fa-2x text-info"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stats-card secondary">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number" id="categories-count">0</div>
+                    <div>Categories</div>
+                </div>
+                <i class="fas fa-tags fa-2x text-success"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-plus me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('admin.add_app') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-mobile-alt me-2"></i>Add New App
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('admin.add_game') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-gamepad me-2"></i>Add New Game
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('admin.add_news') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-newspaper me-2"></i>Add News Article
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('admin.categories') }}" class="btn btn-warning w-100">
+                            <i class="fas fa-tags me-2"></i>Manage Categories
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-mobile-alt me-2"></i>Recent Apps</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_apps %}
+                    {% for app in recent_apps %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            {% if app.icon %}
+                                <img src="{{ app.icon }}" alt="{{ app.name }}" style="width: 40px; height: 40px; border-radius: 8px;">
+                            {% else %}
+                                <div class="bg-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 8px;">
+                                    <i class="fas fa-mobile-alt text-white"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ app.name }}</div>
+                            <small class="text-muted">{{ app.category or 'Uncategorized' }}</small>
+                        </div>
+                        <div>
+                            <a href="{{ url_for('admin.edit_app', app_id=app.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No apps found</p>
+                {% endif %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('admin.apps_list') }}" class="btn btn-sm btn-outline-primary">View All Apps</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-gamepad me-2"></i>Recent Games</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_games %}
+                    {% for game in recent_games %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            {% if game.icon %}
+                                <img src="{{ game.icon }}" alt="{{ game.name }}" style="width: 40px; height: 40px; border-radius: 8px;">
+                            {% else %}
+                                <div class="bg-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 8px;">
+                                    <i class="fas fa-gamepad text-white"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ game.name }}</div>
+                            <small class="text-muted">{{ game.category or 'Uncategorized' }}</small>
+                        </div>
+                        <div>
+                            <a href="{{ url_for('admin.edit_game', game_id=game.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No games found</p>
+                {% endif %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('admin.games_list') }}" class="btn btn-sm btn-outline-primary">View All Games</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-newspaper me-2"></i>Recent News</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_news %}
+                    {% for article in recent_news %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            {% if article.featured_image %}
+                                <img src="{{ article.featured_image }}" alt="{{ article.title }}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 8px;">
+                                    <i class="fas fa-newspaper text-white"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ article.title[:30] }}...</div>
+                            <small class="text-muted">{{ article.author or 'Unknown' }}</small>
+                        </div>
+                        <div>
+                            <a href="{{ url_for('admin.edit_news', news_id=article.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No news articles found</p>
+                {% endif %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('admin.news_list') }}" class="btn btn-sm btn-outline-primary">View All News</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.stats-card.secondary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 1px solid #dee2e6;
+}
+
+.stats-card.secondary .stats-number {
+    font-size: 1.8rem;
+    color: #495057;
+}
+</style>
+
+<script>
+// Load initial stats
+document.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+});
+
+// Auto-refresh stats every 30 seconds
+setInterval(loadStats, 30000);
+
+function loadStats() {
+    fetch('{{ url_for("admin.api_stats") }}')
+        .then(response => response.json())
+        .then(data => {
+            // Update main stats
+            document.querySelector('.stats-card:nth-child(1) .stats-number').textContent = data.apps;
+            document.querySelector('.stats-card:nth-child(2) .stats-number').textContent = data.games;
+            document.querySelector('.stats-card:nth-child(3) .stats-number').textContent = data.news;
+            document.getElementById('comments-count').textContent = data.comments || 0;
+            
+            // Update secondary stats
+            document.getElementById('pending-comments').textContent = data.pending_comments || 0;
+            document.getElementById('total-content').textContent = (data.apps + data.games + data.news);
+            document.getElementById('categories-count').textContent = (data.categories.apps + data.categories.games);
+        })
+        .catch(error => console.log('Stats update failed:', error));
+}
+</script>
+{% endblock %}

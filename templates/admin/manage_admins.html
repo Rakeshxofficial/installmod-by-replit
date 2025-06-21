@@ -1,0 +1,183 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Admins - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-users-cog"></i> Manage Admins</h2>
+    <a href="{{ url_for('admin.add_admin') }}" class="btn btn-success">
+        <i class="fas fa-plus"></i> Add New Admin
+    </a>
+</div>
+
+<!-- Search Form -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="search" value="{{ search }}" 
+                       placeholder="Search by username or email...">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Admin List -->
+<div class="card">
+    <div class="card-body">
+        {% if admins.items %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Full Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Content</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for admin in admins.items %}
+                    <tr>
+                        <td>
+                            <strong>{{ admin.username }}</strong>
+                            {% if admin.is_owner %}
+                                <span class="badge bg-warning text-dark ms-1">Owner</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ admin.email }}</td>
+                        <td>{{ admin.full_name or '-' }}</td>
+                        <td>
+                            {% if admin.is_owner %}
+                                <span class="badge bg-primary">Owner</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Admin</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if admin.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Disabled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if admin.created_at %}
+                                {{ admin.created_at.strftime('%Y-%m-%d') }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small class="text-muted">
+                                {{ admin.apps|length }} apps, 
+                                {{ admin.games|length }} games, 
+                                {{ admin.news|length }} news
+                            </small>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                {% if not admin.is_owner or admin.id != session.admin_id %}
+                                    <!-- Toggle Status Button -->
+                                    <form method="POST" action="{{ url_for('admin.toggle_admin_status', admin_id=admin.id) }}" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Are you sure you want to {{ 'disable' if admin.is_active else 'enable' }} this admin?')">
+                                        <button type="submit" class="btn btn-outline-{{ 'warning' if admin.is_active else 'success' }}" 
+                                                title="{{ 'Disable' if admin.is_active else 'Enable' }} Admin">
+                                            <i class="fas fa-{{ 'ban' if admin.is_active else 'check' }}"></i>
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Reset Password Button -->
+                                    <a href="{{ url_for('admin.reset_admin_password', admin_id=admin.id) }}" 
+                                       class="btn btn-outline-info" title="Reset Password">
+                                        <i class="fas fa-key"></i>
+                                    </a>
+                                    
+                                    <!-- Delete Button -->
+                                    {% if not admin.is_owner %}
+                                    <form method="POST" action="{{ url_for('admin.delete_admin', admin_id=admin.id) }}" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Are you sure you want to delete this admin? This will also delete all their content!')">
+                                        <button type="submit" class="btn btn-outline-danger" title="Delete Admin">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted small">Current User</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if admins.pages > 1 %}
+        <nav aria-label="Admin pagination">
+            <ul class="pagination justify-content-center mt-4">
+                {% if admins.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin.manage_admins', page=admins.prev_num, search=search) }}">Previous</a>
+                    </li>
+                {% endif %}
+                
+                {% for page_num in admins.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != admins.page %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin.manage_admins', page=page_num, search=search) }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page_num }}</span>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if admins.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('admin.manage_admins', page=admins.next_num, search=search) }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No admins found</h5>
+            {% if search %}
+                <p class="text-muted">Try adjusting your search criteria</p>
+                <a href="{{ url_for('admin.manage_admins') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Clear Search
+                </a>
+            {% else %}
+                <p class="text-muted">Create your first admin account</p>
+                <a href="{{ url_for('admin.add_admin') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add New Admin
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

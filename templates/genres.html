@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Genres{% endblock %}
+
+{% block meta_description %}Browse all genres and categories. Find apps and games from your favorite genres including action, puzzle, music, productivity and more.{% endblock %}
+
+{% block content %}
+<div class="genres-page">
+    <!-- Hero Section -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title">Browse by Genre</h1>
+            <p class="page-description">Discover apps and games organized by categories and genres</p>
+        </div>
+    </div>
+
+    <!-- Genres Grid -->
+    <div class="container">
+        <div class="genres-grid">
+            {% for genre in genres %}
+            <div class="genre-card">
+                <a href="{{ url_for('genre_detail', slug=genre.slug) }}" class="genre-link">
+                    <div class="genre-icon">
+                        {% if 'music' in genre.name.lower() %}
+                            <i class="fas fa-music"></i>
+                        {% elif 'game' in genre.name.lower() or 'action' in genre.name.lower() %}
+                            <i class="fas fa-gamepad"></i>
+                        {% elif 'photo' in genre.name.lower() or 'video' in genre.name.lower() %}
+                            <i class="fas fa-camera"></i>
+                        {% elif 'social' in genre.name.lower() %}
+                            <i class="fas fa-users"></i>
+                        {% elif 'tool' in genre.name.lower() or 'productivity' in genre.name.lower() %}
+                            <i class="fas fa-tools"></i>
+                        {% elif 'education' in genre.name.lower() %}
+                            <i class="fas fa-graduation-cap"></i>
+                        {% elif 'entertainment' in genre.name.lower() %}
+                            <i class="fas fa-tv"></i>
+                        {% elif 'business' in genre.name.lower() %}
+                            <i class="fas fa-briefcase"></i>
+                        {% elif 'health' in genre.name.lower() %}
+                            <i class="fas fa-heart"></i>
+                        {% elif 'travel' in genre.name.lower() %}
+                            <i class="fas fa-plane"></i>
+                        {% elif 'shopping' in genre.name.lower() %}
+                            <i class="fas fa-shopping-cart"></i>
+                        {% elif 'news' in genre.name.lower() %}
+                            <i class="fas fa-newspaper"></i>
+                        {% elif 'finance' in genre.name.lower() %}
+                            <i class="fas fa-dollar-sign"></i>
+                        {% elif 'sports' in genre.name.lower() %}
+                            <i class="fas fa-football-ball"></i>
+                        {% else %}
+                            <i class="fas fa-star"></i>
+                        {% endif %}
+                    </div>
+                    <div class="genre-info">
+                        <h3 class="genre-name">{{ genre.name }}</h3>
+                        <div class="genre-stats">
+                            <span class="stat-item">
+                                <i class="fas fa-mobile-alt"></i>
+                                {{ genre.app_count }} Apps
+                            </span>
+                            <span class="stat-item">
+                                <i class="fas fa-gamepad"></i>
+                                {{ genre.game_count }} Games
+                            </span>
+                        </div>
+                        <div class="genre-total">
+                            {{ genre.total_count }} items total
+                        </div>
+                    </div>
+                    <div class="genre-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if not genres %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-tags"></i>
+            </div>
+            <h3>No Genres Found</h3>
+            <p>There are currently no genres available.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.genres-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #2c5530, #4a7c59);
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.genres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+.genre-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.genre-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.genre-link {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.genre-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #2c5530, #4a7c59);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.genre-info {
+    flex: 1;
+}
+
+.genre-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c5530;
+    margin-bottom: 0.5rem;
+}
+
+.genre-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-item i {
+    color: #2c5530;
+}
+
+.genre-total {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.genre-arrow {
+    color: #2c5530;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 2rem 0;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .genres-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+    
+    .genre-link {
+        padding: 1rem;
+    }
+    
+    .genre-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+    
+    .genre-name {
+        font-size: 1.1rem;
+    }
+    
+    .genre-stats {
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        font-size: 0.8rem;
+    }
+}
+</style>
+{% endblock %}

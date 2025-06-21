@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - JARMOD.COM{% endblock %}
+
+{% block description %}Get in touch with JARMOD.COM team. Contact us for support, business inquiries, DMCA requests, or general questions.{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Contact Us</h1>
+        <p class="lead">We're here to help and answer any questions you might have</p>
+    </div>
+
+    <div class="content-page">
+        <div class="contact-grid">
+            <div class="contact-methods">
+                <h2>Get in Touch</h2>
+                <p>Choose the best way to reach us based on your inquiry type:</p>
+
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Business Inquiries</h3>
+                        <p>Partnership opportunities, advertising, and business collaborations</p>
+                        <a href="mailto:business@jarmod.com" class="contact-link">business@jarmod.com</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>DMCA & Legal</h3>
+                        <p>Copyright claims, takedown requests, and legal matters</p>
+                        <a href="mailto:DMCA@jarmod.com" class="contact-link">DMCA@jarmod.com</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Live Chat Support</h3>
+                        <p>Quick support, app requests, and general questions</p>
+                        <a href="https://t.me/JarMODbot" target="_blank" class="contact-link">@JarMODbot</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Telegram Channel</h3>
+                        <p>Stay updated with latest MODs and announcements</p>
+                        <a href="https://t.me/jarmodcom" target="_blank" class="contact-link">@jarmodcom</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-section">
+                <h2>Send Us a Message</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="contactName">Your Name</label>
+                        <input type="text" id="contactName" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Your Email</label>
+                        <input type="email" id="contactEmail" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactSubject">Subject</label>
+                        <select id="contactSubject" name="subject" required>
+                            <option value="">Select a topic</option>
+                            <option value="general">General Question</option>
+                            <option value="support">Technical Support</option>
+                            <option value="request">App Request</option>
+                            <option value="business">Business Inquiry</option>
+                            <option value="dmca">DMCA/Legal</option>
+                            <option value="feedback">Feedback</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" name="message" rows="6" required placeholder="Please describe your inquiry in detail..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>How do I request a specific MOD APK?</h3>
+                    <p>Contact us via Telegram @JarMODbot with the app name and specific features you need. We'll review and add it to our development queue.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Are your MOD APKs safe to use?</h3>
+                    <p>Yes, all our MOD APKs are thoroughly tested for security and functionality before release. We use advanced scanning tools to ensure no malware or viruses.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How often do you update MOD APKs?</h3>
+                    <p>We monitor original app updates and typically release MOD versions within 1-3 days of the official update, depending on complexity.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I submit my own MOD APK?</h3>
+                    <p>We welcome community contributions. Contact us at business@jarmod.com with details about your MOD and we'll review it for inclusion.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="response-time">
+            <h2>Response Times</h2>
+            <ul>
+                <li><strong>Telegram Support:</strong> Usually within 1 hour during business hours</li>
+                <li><strong>Business Inquiries:</strong> 24-48 hours</li>
+                <li><strong>DMCA Requests:</strong> 48-72 hours</li>
+                <li><strong>General Questions:</strong> 2-3 business days</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const subject = document.getElementById('contactSubject').value;
+    const message = document.getElementById('contactMessage').value;
+    
+    // Create mailto link
+    const mailtoLink = `mailto:business@installmod.com?subject=${encodeURIComponent(subject + ' - ' + name)}&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + message)}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+    
+    // Show success message
+    alert('Thank you for your message! Your email client should open with the pre-filled message. If not, please copy the details and send manually to business@installmod.com');
+});
+</script>
+{% endblock %}
